@@ -11,20 +11,34 @@ import java.io.FileFilter;
 import java.io.IOException;
 
 // Graphic UI
-public class Main extends JPanel {
+public class Main extends JPanel implements KeyListener {
     public static final int CELL_SIZE = 20;
     public static int width = 400;
     public static int height = 400;
     public static int row = height / CELL_SIZE;
     public static int column = width / CELL_SIZE;
 
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(width, height);
-    }
 
     public Main() {
 
+    }
+
+    private void setTimer() {
+
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+
+    }
+
+    private void reset() {
+
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(width, height);
     }
 
     public static void main(String[] args) {
@@ -36,5 +50,31 @@ public class Main extends JPanel {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         window.setResizable(false);
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    public void read_hightes_score() {
+
+    }
+
+    public void write_a_file(int score) {
+
+    }
+
+    // Additional Code by VS code
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
 }
