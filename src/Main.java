@@ -26,7 +26,11 @@ public class Main extends JPanel implements KeyListener {
 
     public static int highest_score;
 
+    public static String direction = "Right";
+    public static boolean allowKeyPress = true;
+
     public Main() {
+
     }
 
     // Setting speed
@@ -46,24 +50,25 @@ public class Main extends JPanel implements KeyListener {
         Fruit fruit = new Fruit();
 
         g.fillRect(0, 0, width, height);
+        // fruit.drawFruit(g);
         snake.drawSnake(g);
 
         // Move the snake by Keyboard
         int snakeX = snake.getSnakeBody().get(0).x;
         int snakeY = snake.getSnakeBody().get(0).y;
 
-        // if (direction.equals("Left")) {
-        //     snakeX -= CELL_SIZE; // left, x -= CELL_SIZE
-        // }
-        // else if (direction.equals("Right")) {
-        //     snakeY -= CELL_SIZE; // up, y -= CELL_SIZE
-        // }
-        // else if (direction.equals("Up")) {
-        //     snakeX += CELL_SIZE;
-        // }
-        // else if (direction.equals("Down")) {
-        //     snakeY += CELL_SIZE;
-        // }
+        if (direction.equals("Left")) {
+            snakeX -= CELL_SIZE; // left, x -= CELL_SIZE
+        }
+        else if (direction.equals("Right")) {
+            snakeY -= CELL_SIZE; // up, y -= CELL_SIZE
+        }
+        else if (direction.equals("Up")) {
+            snakeX += CELL_SIZE;
+        }
+        else if (direction.equals("Down")) {
+            snakeY += CELL_SIZE;
+        }
 
         Node newHead = new Node(snakeX, snakeY);
 
@@ -71,6 +76,8 @@ public class Main extends JPanel implements KeyListener {
         // Remove the tail and put it in head
         snake.getSnakeBody().remove(snake.getSnakeBody().size() - 1);
         snake.getSnakeBody().add(0, newHead);
+
+        // snake.drawSnake(g);
     }
 
     private void reset() {
@@ -96,9 +103,21 @@ public class Main extends JPanel implements KeyListener {
     // Move the snake by Keyboard 
     @Override
     public void keyPressed(KeyEvent e) {
-        // if (allowKeyPress) {
-        //     if (e.getKeyCode() == 37 && !direction.equals("Right"))
-        // }
+        if (allowKeyPress) {
+            if (e.getKeyCode() == 37 && !direction.equals("Right")) {
+                direction = "Left";
+            }
+            else if (e.getKeyCode() == 38 && !direction.equals("Down")) {
+                direction = "Up";
+            }
+            else if (e.getKeyCode() == 39 && !direction.equals("Left")) {
+                direction = "Right";
+            }
+            else if (e.getKeyCode() == 40 && !direction.equals("Up")) {
+                direction = "Down";
+            }
+            allowKeyPress = false;
+        }
     }
 
     public void read_hightes_score() {
@@ -147,12 +166,14 @@ public class Main extends JPanel implements KeyListener {
     // Additional Code by VS code
     @Override
     public void keyTyped(KeyEvent e) {
+        // allowKeyPress = true;
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        // allowKeyPress = true;
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
