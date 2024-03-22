@@ -17,6 +17,7 @@ public class Snake {
     }
 
     public void drawSnake(Graphics g) {
+        // The color of the snake
         for (int i = 0; i < snakeBody.size(); i++) {
             if (i == 0) {
                 g.setColor(Color.GREEN);
@@ -24,6 +25,19 @@ public class Snake {
             else {
                 g.setColor(Color.ORANGE);
             }
+
+
+            // Handle the border
+            Node n = snakeBody.get(i);
+            if (n.x >= Main.width) {
+                n.x = 0;
+            }
+            if (n.x < 0) {
+                n.x = Main.width - Main.CELL_SIZE;
+            }
+            // y-axis
+            g.fillOval(n.x, n.y, Main.CELL_SIZE, Main.CELL_SIZE);
+            
         }
     }
 }

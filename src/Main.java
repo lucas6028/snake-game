@@ -20,16 +20,24 @@ public class Main extends JPanel implements KeyListener {
 
 
     public Main() {
-
     }
 
+    // Setting speed
     private void setTimer() {
-
     }
 
     @Override
     public void paintComponent(Graphics g) {
+        Snake snake = new Snake();
+        Fruit fruit = new Fruit();
 
+        g.fillRect(0, 0, width, height);
+        snake.drawSnake(g);
+
+        // Snake move
+        // Remove the tail and put it in head
+        snake.getSnakeBody().remove(snake.getSnakeBody().size() - 1);
+        // snake.getSnakeBody().add(0, newHead);
     }
 
     private void reset() {
