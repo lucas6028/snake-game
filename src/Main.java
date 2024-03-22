@@ -12,18 +12,29 @@ import java.io.IOException;
 
 // Graphic UI
 public class Main extends JPanel implements KeyListener {
+    // Size of frame variables
     public static final int CELL_SIZE = 20;
     public static int width = 400;
     public static int height = 400;
     public static int row = height / CELL_SIZE;
     public static int column = width / CELL_SIZE;
 
+    // Setting speed variables
+    private Timer t;
+    private int speed = 100;
 
     public Main() {
     }
 
     // Setting speed
     private void setTimer() {
+        t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                repaint();
+            }
+        }, 0, speed);
     }
 
     @Override
@@ -60,9 +71,12 @@ public class Main extends JPanel implements KeyListener {
         window.setResizable(false);
     }
 
+    // Move the snake by Keyboard 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        // if (allowKeyPress) {
+        //     if (e.getKeyCode() == 37 && !direc)
+        // }
     }
 
     public void read_hightes_score() {
