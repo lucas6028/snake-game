@@ -30,7 +30,7 @@ public class Main extends JPanel implements KeyListener {
     public static boolean allowKeyPress = true;
 
     public Main() {
-
+        
     }
 
     // Setting speed
@@ -103,6 +103,7 @@ public class Main extends JPanel implements KeyListener {
     // Move the snake by Keyboard 
     @Override
     public void keyPressed(KeyEvent e) {
+        System.out.println("keyPressed");
         if (allowKeyPress) {
             if (e.getKeyCode() == 37 && !direction.equals("Right")) {
                 direction = "Left";
@@ -166,15 +167,15 @@ public class Main extends JPanel implements KeyListener {
     // Additional Code by VS code
     @Override
     public void keyTyped(KeyEvent e) {
-        // allowKeyPress = true;
+        System.out.println("keyTyped");
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // allowKeyPress = true;
+        System.out.println("keyReleased");
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+        //throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
 }
