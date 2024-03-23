@@ -29,8 +29,14 @@ public class Main extends JPanel implements KeyListener {
     public static String direction = "Right";
     public static boolean allowKeyPress = true;
 
+    public static Snake snake = new Snake();
+    public static Fruit fruit = new Fruit();
+
     public Main() {
-        
+        // Detect the keyboard
+        setFocusable(true);
+        addKeyListener(this);
+        setTimer();
     }
 
     // Setting speed
@@ -46,9 +52,6 @@ public class Main extends JPanel implements KeyListener {
 
     @Override
     public void paintComponent(Graphics g) {
-        Snake snake = new Snake();
-        Fruit fruit = new Fruit();
-
         g.fillRect(0, 0, width, height);
         // fruit.drawFruit(g);
         snake.drawSnake(g);
@@ -61,13 +64,13 @@ public class Main extends JPanel implements KeyListener {
             snakeX -= CELL_SIZE; // left, x -= CELL_SIZE
         }
         else if (direction.equals("Right")) {
-            snakeY -= CELL_SIZE; // up, y -= CELL_SIZE
+            snakeX += CELL_SIZE; // right, x += CELL_SIZE
         }
         else if (direction.equals("Up")) {
-            snakeX += CELL_SIZE;
+            snakeY -= CELL_SIZE; // up, y -= CELL_SIZE
         }
         else if (direction.equals("Down")) {
-            snakeY += CELL_SIZE;
+            snakeY += CELL_SIZE; // down, y += CELL_SIZE
         }
 
         Node newHead = new Node(snakeX, snakeY);
@@ -76,8 +79,6 @@ public class Main extends JPanel implements KeyListener {
         // Remove the tail and put it in head
         snake.getSnakeBody().remove(snake.getSnakeBody().size() - 1);
         snake.getSnakeBody().add(0, newHead);
-
-        // snake.drawSnake(g);
     }
 
     private void reset() {
@@ -117,8 +118,9 @@ public class Main extends JPanel implements KeyListener {
             else if (e.getKeyCode() == 40 && !direction.equals("Up")) {
                 direction = "Down";
             }
-            allowKeyPress = false;
+            // allowKeyPress = false;
         }
+        repaint();
     }
 
     public void read_hightes_score() {

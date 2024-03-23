@@ -29,6 +29,7 @@ public class Snake {
 
             // Handle the border
             Node n = snakeBody.get(i);
+            // x-axis
             if (n.x >= Main.width) {
                 n.x = 0;
             }
@@ -36,6 +37,13 @@ public class Snake {
                 n.x = Main.width - Main.CELL_SIZE;
             }
             // y-axis
+            if (n.y >= Main.height) {
+                n.y = 0;
+            }
+            if (n.y < 0) {
+                n.y = Main.height - Main.CELL_SIZE;
+            }
+            
             g.fillOval(n.x, n.y, Main.CELL_SIZE, Main.CELL_SIZE);
             
         }
