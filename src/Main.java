@@ -61,29 +61,6 @@ public class Main extends JPanel implements KeyListener {
 
         snakeA.moveSnake(CELL_SIZE);
         snakeB.moveSnake(CELL_SIZE);
-        // // Move the snake by Keyboard
-        // int snakeX = snakeA.getSnakeBody().get(0).x;
-        // int snakeY = snakeA.getSnakeBody().get(0).y;
-
-        // if (direction.equals("Left")) {
-        //     snakeX -= CELL_SIZE; // left, x -= CELL_SIZE
-        // }
-        // else if (direction.equals("Right")) {
-        //     snakeX += CELL_SIZE; // right, x += CELL_SIZE
-        // }
-        // else if (direction.equals("Up")) {
-        //     snakeY -= CELL_SIZE; // up, y -= CELL_SIZE
-        // }
-        // else if (direction.equals("Down")) {
-        //     snakeY += CELL_SIZE; // down, y += CELL_SIZE
-        // }
-
-        // Node newHead = new Node(snakeX, snakeY);
-
-        // // Snake move
-        // // Remove the tail and put it in head
-        // snakeA.getSnakeBody().remove(snakeA.getSnakeBody().size() - 1);
-        // snakeA.getSnakeBody().add(0, newHead);
     }
 
     private void reset() {
@@ -112,22 +89,6 @@ public class Main extends JPanel implements KeyListener {
         System.out.println("keyPressed");
         snakeA.changeDirection(e, allowKeyPress, true);
         snakeB.changeDirection(e, allowKeyPress, false);
-        // if (allowKeyPress) {
-        //     if (e.getKeyCode() == 37 && !direction.equals("Right")) {
-        //         direction = "Left";
-        //     }
-        //     else if (e.getKeyCode() == 38 && !direction.equals("Down")) {
-        //         direction = "Up";
-        //     }
-        //     else if (e.getKeyCode() == 39 && !direction.equals("Left")) {
-        //         direction = "Right";
-        //     }
-        //     else if (e.getKeyCode() == 40 && !direction.equals("Up")) {
-        //         direction = "Down";
-        //     }
-        //     // allowKeyPress = false;
-        // }
-        // repaint();
     }
 
     public void read_hightes_score() {
