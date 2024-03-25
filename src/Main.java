@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -29,9 +28,9 @@ public class Main extends JPanel implements KeyListener {
     public static boolean allowKeyPress = true;
 
     // can be moved to the body of paintComponent()
+    public static Fruit fruit = new Fruit();
     public static Snake snakeA = new Snake(0);
     public static Snake snakeB = new Snake(350);
-    public static Fruit fruit = new Fruit();
 
     public Main() {
         // Detect the keyboard
@@ -59,8 +58,8 @@ public class Main extends JPanel implements KeyListener {
         snakeB.drawSnake(g, false);
         fruit.drawFruit(g);
 
-        snakeA.checkEatFruit(fruit, snakeA, g, highest_score);
-        snakeB.checkEatFruit(fruit, snakeB, g, highest_score);
+        snakeB.checkEatFruit(fruit, g, highest_score);
+        snakeA.checkEatFruit(fruit, g, highest_score);
 
         snakeA.moveSnake(CELL_SIZE);
         snakeB.moveSnake(CELL_SIZE);

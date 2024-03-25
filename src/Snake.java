@@ -17,7 +17,7 @@ public class Snake {
     }
 
     public ArrayList<Node> getSnakeBody() {
-        return snakeBody;
+        return this.snakeBody;
     }
 
     public void drawSnake(Graphics g, boolean isA) {
@@ -65,8 +65,8 @@ public class Snake {
 
     public void moveSnake(int CELL_SIZE) {
         // Move the snake by Keyboard
-        snakeX = getSnakeBody().get(0).x;
-        snakeY = getSnakeBody().get(0).y;
+        snakeX = this.getSnakeBody().get(0).x;
+        snakeY = this.getSnakeBody().get(0).y;
 
         if (direction.equals("Left")) {
             snakeX -= CELL_SIZE; // left, x -= CELL_SIZE
@@ -85,8 +85,8 @@ public class Snake {
 
         // Snake move
         // Remove the tail and put it in head
-        getSnakeBody().remove(getSnakeBody().size() - 1);
-        getSnakeBody().add(0, newHead);
+        this.getSnakeBody().remove(getSnakeBody().size() - 1);
+        this.getSnakeBody().add(0, newHead);
     }
 
     public void changeDirection(KeyEvent e, boolean allowKeyPress, boolean byArrowKey) {
@@ -124,11 +124,13 @@ public class Snake {
         }
     }
 
-    public void checkEatFruit(Fruit fruit, Snake snake, Graphics g, int score) {
-        if (getSnakeBody().get(0).x == fruit.getX() &&
-            getSnakeBody().get(0).y == fruit.getY()) {
+    public void checkEatFruit(Fruit fruit, Graphics g, int score) {
+        // Node newHead = new Node(snakeX, snakeY);
+        
+        if (this.getSnakeBody().get(0).x == fruit.getX() &&
+            this.getSnakeBody().get(0).y == fruit.getY()) {
                 // set fruit to new location
-                fruit.setNewLocation(snake);
+                fruit.setNewLocation(this);
 
                 // draw fruit
                 fruit.drawFruit(g);
@@ -136,7 +138,11 @@ public class Snake {
                 score++;
             }
         else {
-            
+            // getSnakeBody().remove(getSnakeBody().size() - 1);
         }
+
+        // Snake move
+        // Remove the tail and put it in head
+        // getSnakeBody().add(0, newHead);
     }
 }

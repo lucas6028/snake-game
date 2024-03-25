@@ -1,5 +1,4 @@
 import javax.swing.ImageIcon;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -7,6 +6,7 @@ import java.util.ArrayList;
 public class Fruit {
     private int x, y;
     public ImageIcon img;
+    
     public Fruit() {
         img = new ImageIcon("fruit.jpg");    
         this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE);
@@ -28,15 +28,20 @@ public class Fruit {
     }
 
     public void setNewLocation(Snake s) {
-        int new_x = -1;
-        int new_y = -1;
-        boolean overlapping = false;
+        int new_x = this.x;
+        int new_y = this.y;
+        boolean overlapping = check_overlap(new_x, new_y, s);
 
-        do {
+        while (overlapping) { 
             new_x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE);
             new_y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
             overlapping = check_overlap(new_x, new_y, s);
-        } while(overlapping);
+        }
+        // do {
+        //     new_x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE);
+        //     new_y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
+        //     overlapping = check_overlap(new_x, new_y, s);
+        // } while(overlapping);
 
         this.x = new_x;
         this.y = new_y; 
