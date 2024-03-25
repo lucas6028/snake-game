@@ -26,7 +26,6 @@ public class Main extends JPanel implements KeyListener {
 
     public static int highest_score;
 
-    // public static String direction = "Right";
     public static boolean allowKeyPress = true;
 
     // can be moved to the body of paintComponent()
@@ -58,6 +57,7 @@ public class Main extends JPanel implements KeyListener {
         // fruit.drawFruit(g);
         snakeA.drawSnake(g, true);
         snakeB.drawSnake(g, false);
+        fruit.drawFruit(g);
 
         snakeA.moveSnake(CELL_SIZE);
         snakeB.moveSnake(CELL_SIZE);
