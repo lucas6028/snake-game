@@ -28,11 +28,13 @@ public class Fruit {
     }
 
     public void setNewLocation(Snake s) {
-        int new_x = 60;
-        int new_y = 45;
-        boolean overlapping;
+        int new_x = -1;
+        int new_y = -1;
+        boolean overlapping = false;
 
         do {
+            new_x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE);
+            new_y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
             overlapping = check_overlap(new_x, new_y, s);
         } while(overlapping);
 
@@ -49,7 +51,6 @@ public class Fruit {
                     return true;
                 }
         }
-
         return false;
     } 
 }

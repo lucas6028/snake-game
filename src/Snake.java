@@ -123,4 +123,20 @@ public class Snake {
             }
         }
     }
+
+    public void checkEatFruit(Fruit fruit, Snake snake, Graphics g, int score) {
+        if (getSnakeBody().get(0).x == fruit.getX() &&
+            getSnakeBody().get(0).y == fruit.getY()) {
+                // set fruit to new location
+                fruit.setNewLocation(snake);
+
+                // draw fruit
+                fruit.drawFruit(g);
+
+                score++;
+            }
+        else {
+            
+        }
+    }
 }

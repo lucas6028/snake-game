@@ -59,6 +59,9 @@ public class Main extends JPanel implements KeyListener {
         snakeB.drawSnake(g, false);
         fruit.drawFruit(g);
 
+        snakeA.checkEatFruit(fruit, snakeA, g, highest_score);
+        snakeB.checkEatFruit(fruit, snakeB, g, highest_score);
+
         snakeA.moveSnake(CELL_SIZE);
         snakeB.moveSnake(CELL_SIZE);
     }
