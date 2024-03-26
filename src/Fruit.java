@@ -8,7 +8,7 @@ public class Fruit {
     public ImageIcon img;
     
     public Fruit() {
-        img = new ImageIcon("fruit.jpg");    
+        img = new ImageIcon("../images/fruits/fruit.png");    
         this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE);
         this.y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE); 
     }
@@ -22,9 +22,9 @@ public class Fruit {
     }
 
     public void drawFruit(Graphics g) {
-        // img.paintIcon(null, g, this.x, this.y);
-        g.setColor(Color.GREEN);
-        g.fillOval(this.x, this.y, Main.CELL_SIZE, Main.CELL_SIZE);
+        img.paintIcon(null, g, this.x, this.y);
+        // g.setColor(Color.GREEN);
+        // g.fillOval(this.x, this.y, Main.CELL_SIZE, Main.CELL_SIZE);
     }
 
     public void setNewLocation(Snake s) {
