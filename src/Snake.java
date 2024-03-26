@@ -1,4 +1,5 @@
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -101,15 +102,19 @@ public class Snake {
         if (byArrowKey) {
             if (e.getKeyCode() == 37 && !direction.equals("Right")) {
                 direction = "Left";
+                System.out.println("Left");
             }
             else if (e.getKeyCode() == 39 && !direction.equals("Left")) {
                 direction = "Right";
+                System.out.println("Right");
             }
             else if (e.getKeyCode() == 38 && !direction.equals("Down")) {
                 direction = "Up";
+                System.out.println("Up");
             }
             else if (e.getKeyCode() == 40 && !direction.equals("Up")) {
                 direction = "Down";
+                System.out.println("Down");
             }
             // allowKeyPress = false;
         }
@@ -129,7 +134,7 @@ public class Snake {
         }
     }
 
-    public void checkEatFruit(Fruit fruit, Graphics g, int score) {
+    public void checkEatFruit(Fruit fruit, Graphics g) {
         // Node newHead = new Node(snakeX, snakeY);
         
         if (this.getSnakeBody().get(0).x == fruit.getX() &&
@@ -140,7 +145,7 @@ public class Snake {
                 // draw fruit
                 fruit.drawFruit(g);
 
-                score++;
+                Main.score++;
                 eatFruit = true;
             }
         else {
