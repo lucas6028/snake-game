@@ -6,7 +6,9 @@ public class Snake {
     public int snakeX;
     public int snakeY;
     public String direction = "Right";
+    public Node newHead; 
     private ArrayList<Node> snakeBody;
+    private boolean eatFruit = false;
 
     public Snake(int y) {
         snakeBody = new ArrayList<>();
@@ -81,11 +83,14 @@ public class Snake {
             snakeY += CELL_SIZE; // down, y += CELL_SIZE
         }
 
-        Node newHead = new Node(snakeX, snakeY);
+        newHead = new Node(snakeX, snakeY);
 
         // Snake move
         // Remove the tail and put it in head
-        this.getSnakeBody().remove(getSnakeBody().size() - 1);
+        if (!eatFruit) {
+            this.getSnakeBody().remove(getSnakeBody().size() - 1);
+            eatFruit = false;
+        }
         this.getSnakeBody().add(0, newHead);
     }
 
@@ -136,13 +141,15 @@ public class Snake {
                 fruit.drawFruit(g);
 
                 score++;
+                eatFruit = true;
             }
         else {
-            // getSnakeBody().remove(getSnakeBody().size() - 1);
+            eatFruit = false;
+            // this.getSnakeBody().remove(this.getSnakeBody().size() - 1);
         }
 
         // Snake move
         // Remove the tail and put it in head
-        // getSnakeBody().add(0, newHead);
+        // this.getSnakeBody().add(0, newHead);
     }
 }
