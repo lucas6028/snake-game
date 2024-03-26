@@ -66,7 +66,17 @@ public class Main extends JPanel implements KeyListener {
     }
 
     private void reset() {
-
+        highest_score = 0;
+        if (snakeA != null) {
+            snakeA.getSnakeBody().clear();
+        }
+        if (snakeB != null) {
+            snakeB.getSnakeBody().clear();
+        }
+        allowKeyPress = true;
+        snakeA.direction = "Right";
+        snakeB.direction = "Right";
+        setTimer();
     }
 
     @Override
@@ -83,6 +93,8 @@ public class Main extends JPanel implements KeyListener {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         window.setResizable(false);
+
+        // read_hightes_score();
     }
 
     // Move the snake by Keyboard 
@@ -93,7 +105,7 @@ public class Main extends JPanel implements KeyListener {
         snakeB.changeDirection(e, allowKeyPress, false);
     }
 
-    public void read_hightes_score() {
+    public static void read_hightes_score() {
         // If the file already exist, read the highest score
         try{
             File myObj = new File("filename.txt");
