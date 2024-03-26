@@ -3,6 +3,7 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Scanner;
+import java.util.ArrayList;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -22,7 +23,8 @@ public class Main extends JPanel implements KeyListener {
     // Setting speed variables
     private Timer t;
     private int speed = 100;
-
+    
+    public int score = -1;
     public static int highest_score;
 
     public static boolean allowKeyPress = true;
@@ -31,12 +33,48 @@ public class Main extends JPanel implements KeyListener {
     public static Fruit fruit = new Fruit();
     public static Snake snakeA = new Snake(0);
     public static Snake snakeB = new Snake(100);
+    
+    public Node headA;
+    public Node headB;
 
     public Main() {
         // Detect the keyboard
         setFocusable(true);
         addKeyListener(this);
         setTimer();
+
+        // int responese = JOptionPane.showOptionDialog(
+        //     this,//1.parent container component
+        //     "Game Over!! Your score is "
+        //     + score
+        //     + "The highest score was "
+        //     + highest_score
+        //     + ". Would you like to start over?",//2.Set message to display
+            
+        //     "Game over",//3.Set message title to display
+        //     JOptionPane.YES_NO_OPTION,//4.Set display option type
+        //     JOptionPane.INFORMATION_MESSAGE,//5.Set message type to display
+        //     null,//6.Customize patterns
+        //     null,//7.Set button text
+        //     JOptionPane.YES_OPTION);  //8.Set default button
+        //     // When snake eat itself
+            
+        // //write score
+        // read_hightes_score();
+        // write_a_file(score);
+
+        // //option execution
+        // switch (responese){
+        //     case JOptionPane.CLOSED_OPTION:
+        //         System.exit(0);
+        //         break;
+        //     case JOptionPane.NO_OPTION:
+        //         System.exit(0);
+        //         break;
+        //     case JOptionPane.YES_OPTION:
+        //         reset();
+        //         return;
+        // }
     }
 
     // Setting speed
@@ -61,10 +99,34 @@ public class Main extends JPanel implements KeyListener {
         snakeB.checkEatFruit(fruit, g, highest_score);
         snakeA.checkEatFruit(fruit, g, highest_score);
 
+        headA = snakeA.getSnakeBody().get(0);
+        headB = snakeB.getSnakeBody().get(0);
+
+        for(int i = 1 ; i < snakeA.getSnakeBody().size();i++){
+            if (snakeA.getSnakeBody().get(i).x == headA.x && snakeA.getSnakeBody().get(i).y == headA.y){
+    
+                allowKeyPress = false; //game over keyborad can't use
+    
+                t.cancel(); //game over timer t stop
+                t.purge();
+            }
+        }
+    
+        for(int i = 1 ; i < snakeB.getSnakeBody().size();i++) {
+            if (snakeB.getSnakeBody().get(i).x == headB.x && snakeB.getSnakeBody().get(i).y == headB.y){
+    
+                allowKeyPress = false; //game over keyborad can't use
+    
+                t.cancel(); //game over timer t stop
+                t.purge();
+            }
+        }
+
         snakeA.moveSnake(CELL_SIZE);
         snakeB.moveSnake(CELL_SIZE);
+        
     }
-
+    
     private void reset() {
         highest_score = 0;
         if (snakeA != null) {
@@ -93,8 +155,6 @@ public class Main extends JPanel implements KeyListener {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         window.setResizable(false);
-
-        // read_hightes_score();
     }
 
     // Move the snake by Keyboard 

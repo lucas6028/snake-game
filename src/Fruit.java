@@ -22,9 +22,13 @@ public class Fruit {
     }
 
     public void drawFruit(Graphics g) {
-        img.paintIcon(null, g, this.x, this.y);
-        // g.setColor(Color.GREEN);
-        // g.fillOval(this.x, this.y, Main.CELL_SIZE, Main.CELL_SIZE);
+        if (img != null) {
+            img.paintIcon(null, g, this.x, this.y);
+        }
+        else {
+            g.setColor(Color.GREEN);
+            g.fillOval(this.x, this.y, Main.CELL_SIZE, Main.CELL_SIZE);
+        }
     }
 
     public void setNewLocation(Snake s) {
@@ -37,11 +41,6 @@ public class Fruit {
             new_y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
             overlapping = check_overlap(new_x, new_y, s);
         }
-        // do {
-        //     new_x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE);
-        //     new_y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
-        //     overlapping = check_overlap(new_x, new_y, s);
-        // } while(overlapping);
 
         this.x = new_x;
         this.y = new_y; 
