@@ -39,6 +39,8 @@ public class Main extends JPanel implements KeyListener {
     private Node headA;
     private Node headB;
 
+    private static String recordsFileName = "../records/filename.txt";
+
     public Main() {
         // Detect the keyboard
         setFocusable(true);
@@ -77,7 +79,7 @@ public class Main extends JPanel implements KeyListener {
         
         headA = snakeA.getSnakeBody().get(0);
         headB = snakeB.getSnakeBody().get(0);
-        
+
         for(int i = 3 ; i < snakeA.getSnakeBody().size();i++){
             if (snakeA.getSnakeBody().get(i).x == headA.x && snakeA.getSnakeBody().get(i).y == headA.y){
     
@@ -148,7 +150,7 @@ public class Main extends JPanel implements KeyListener {
     public static void read_hightes_score() {
         // If the file already exist, read the highest score
         try{
-            File myObj = new File("filename.txt");
+            File myObj = new File(recordsFileName);
             Scanner sc = new Scanner(myObj);
             highest_score = sc.nextInt();
             sc.close();
@@ -156,7 +158,7 @@ public class Main extends JPanel implements KeyListener {
         } catch (FileNotFoundException e){
             highest_score = 0;
             try{
-                File myObj = new File("filename.txt");
+                File myObj = new File(recordsFileName);
                 if (myObj.createNewFile()){
                     System.out.println("File creater: " + myObj.getName());
                 }
@@ -207,7 +209,7 @@ public class Main extends JPanel implements KeyListener {
     public void write_a_file(int score) {
         // If the score is higher than records, record new score
         try{
-            FileWriter fw = new FileWriter("filename.txt");
+            FileWriter fw = new FileWriter(recordsFileName);
             if (score > highest_score){
                 fw.write("" + score);
                 highest_score = score;
