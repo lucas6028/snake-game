@@ -30,7 +30,7 @@ public class Main extends JPanel implements KeyListener {
     // can be moved to the body of paintComponent()
     public static Fruit fruit = new Fruit();
     public static Snake snakeA = new Snake(0);
-    public static Snake snakeB = new Snake(350);
+    public static Snake snakeB = new Snake(100);
 
     public Main() {
         // Detect the keyboard
