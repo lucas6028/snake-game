@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.awt.Graphics;
@@ -39,9 +40,18 @@ public class Main extends JPanel implements KeyListener {
     private Node headA;
     private Node headB;
 
-    private static String recordsFileName = "../records/filename.txt";
+    private ImageIcon backgroundImage;
+
+    private static final String recordsFileName = "../records/filename.txt";
+    private static final String background = "../images/background/navy_blue.jpg";
 
     public Main() {
+        // Load the background image
+        backgroundImage = new ImageIcon(background);
+
+        // Set JPanel properties
+        setPreferredSize(new Dimension(backgroundImage.getIconWidth(), backgroundImage.getIconHeight()));
+        
         // Detect the keyboard
         setFocusable(true);
         addKeyListener(this);
@@ -68,6 +78,7 @@ public class Main extends JPanel implements KeyListener {
     @Override
     public void paintComponent(Graphics g) {
         g.fillRect(0, 0, width, height);
+        g.drawImage(backgroundImage.getImage(), 0, 0, null);
 
         // fruit.drawFruit(g);
         snakeA.drawSnake(g, true);
@@ -138,7 +149,7 @@ public class Main extends JPanel implements KeyListener {
         window.setVisible(true);
         window.setResizable(false);
     }
-
+    
     // Move the snake by Keyboard 
     @Override
     public void keyPressed(KeyEvent e) {
