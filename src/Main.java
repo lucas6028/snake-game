@@ -6,13 +6,8 @@ import java.awt.Graphics;
 import java.awt.Dimension;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Scanner;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 
 // Graphic UI
 public class Main extends JPanel implements KeyListener {
@@ -27,22 +22,20 @@ public class Main extends JPanel implements KeyListener {
     private Timer t;
     private int speed = 100;
     
-    public static int score = 0;
-    public static int highest_score;
-
     public static boolean allowKeyPress = true;
 
     // can be moved to the body of paintComponent()
     public static Fruit fruit = new Fruit();
     public static Snake snakeA = new Snake(0);
     public static Snake snakeB = new Snake(100);
-    
+
+    public static ScoreFile file = new ScoreFile();
+
     private Node headA;
     private Node headB;
 
     private ImageIcon backgroundImage;
 
-    private static final String recordsFileName = "../records/filename.txt";
     private static final String background = "../images/background/navy_blue.jpg";
 
     public Main() {
@@ -51,13 +44,13 @@ public class Main extends JPanel implements KeyListener {
 
         // Set JPanel properties
         setPreferredSize(new Dimension(backgroundImage.getIconWidth(), backgroundImage.getIconHeight()));
-        
+
         // Detect the keyboard
         setFocusable(true);
         addKeyListener(this);
         setTimer();
 
-        read_hightes_score();
+        file.read_hightes_score();
         
         if (!allowKeyPress) {
             resetUI();
@@ -121,7 +114,7 @@ public class Main extends JPanel implements KeyListener {
     
     private void reset() {
         // highest_score = 0;
-        score = 0;
+        ScoreFile.score = 0;
         if (snakeA != null) {
             snakeA.getSnakeBody().clear();
         }
@@ -158,38 +151,13 @@ public class Main extends JPanel implements KeyListener {
         snakeB.changeDirection(e, allowKeyPress, false);
     }
 
-    public static void read_hightes_score() {
-        // If the file already exist, read the highest score
-        try{
-            File myObj = new File(recordsFileName);
-            Scanner sc = new Scanner(myObj);
-            highest_score = sc.nextInt();
-            sc.close();
-        // If File is not exist, highest score = 0, open new file and save the records
-        } catch (FileNotFoundException e){
-            highest_score = 0;
-            try{
-                File myObj = new File(recordsFileName);
-                if (myObj.createNewFile()){
-                    System.out.println("File creater: " + myObj.getName());
-                }
-                FileWriter fw = new FileWriter(myObj.getName());
-                fw.write("" + 0);
-                fw.close();
-            } catch (IOException err) {
-                System.out.println("An error occures");
-                err.printStackTrace();
-            }
-        }
-    }
-
     public void resetUI() {
         int responese = JOptionPane.showOptionDialog(
             this,//1.parent container component
             "Game Over!! Your score is "
-            + score
+            + ScoreFile.score
             + ". The highest score was "
-            + highest_score
+            + ScoreFile.highest_score
             + ". Would you like to start over?",//2.Set message to display
             
             "Game over",//3.Set message title to display
@@ -201,7 +169,7 @@ public class Main extends JPanel implements KeyListener {
             // When snake eat itself
             
         //write score
-        write_a_file(score);
+        file.write_a_file(ScoreFile.score);
 
         //option execution
         switch (responese){
@@ -214,23 +182,6 @@ public class Main extends JPanel implements KeyListener {
             case JOptionPane.YES_OPTION:
                 reset();
                 return;
-        }
-    }
-    
-    public void write_a_file(int score) {
-        // If the score is higher than records, record new score
-        try{
-            FileWriter fw = new FileWriter(recordsFileName);
-            if (score > highest_score){
-                fw.write("" + score);
-                highest_score = score;
-        // Keep the original score
-            } else {
-                fw.write("" + highest_score);
-            }
-            fw.close();
-        } catch (IOException e){
-            e.printStackTrace();
         }
     }
 

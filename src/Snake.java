@@ -145,7 +145,7 @@ public class Snake {
                 // draw fruit
                 fruit.drawFruit(g);
 
-                Main.score++;
+                ScoreFile.score++;
                 eatFruit = true;
             }
         else {
