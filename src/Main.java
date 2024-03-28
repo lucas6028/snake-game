@@ -12,7 +12,7 @@ import java.awt.event.KeyListener;
 // Graphic UI
 public class Main extends JPanel implements KeyListener {
     // Size of frame variables
-    public static final int CELL_SIZE = 20;
+    public static final int CELL_SIZE = 15;
     public static int width = 600;
     public static int height = 600;
     public static int row = height / CELL_SIZE;
@@ -20,9 +20,10 @@ public class Main extends JPanel implements KeyListener {
 
     // Setting speed variables
     private Timer t;
-    private int speed = 100;
+    private int speed = 50;
     
     public static boolean allowKeyPress = true;
+    public static boolean enableB = false;
 
     // can be moved to the body of paintComponent()
     public static Fruit fruit = new Fruit();
@@ -73,43 +74,41 @@ public class Main extends JPanel implements KeyListener {
         g.fillRect(0, 0, width, height);
         g.drawImage(backgroundImage.getImage(), 0, 0, null);
 
-        // fruit.drawFruit(g);
+        // Snake A
         snakeA.drawSnake(g, true);
-        snakeB.drawSnake(g, false);
-        fruit.drawFruit(g);
-        
-        snakeB.checkEatFruit(fruit, g);
         snakeA.checkEatFruit(fruit, g);
-        
         headA = snakeA.getSnakeBody().get(0);
-        headB = snakeB.getSnakeBody().get(0);
-
         for(int i = 3 ; i < snakeA.getSnakeBody().size();i++){
             if (snakeA.getSnakeBody().get(i).x == headA.x && snakeA.getSnakeBody().get(i).y == headA.y){
-    
                 allowKeyPress = false; //game over keyborad can't use
-    
+                
                 t.cancel(); //game over timer t stop
                 t.purge();
-
-                resetUI();
-            }
-        }
-    
-        for(int i = 3 ; i < snakeB.getSnakeBody().size();i++) {
-            if (snakeB.getSnakeBody().get(i).x == headB.x && snakeB.getSnakeBody().get(i).y == headB.y){
-    
-                allowKeyPress = false; //game over keyborad can't use
-    
-                t.cancel(); //game over timer t stop
-                t.purge();
-
+                
                 resetUI();
             }
         }
         snakeA.moveSnake(CELL_SIZE);
-        snakeB.moveSnake(CELL_SIZE);
         
+        // Snake B
+        if (enableB) {
+            // snakeB = new Snake(100);
+            snakeB.drawSnake(g, false);
+            snakeB.checkEatFruit(fruit, g);
+            headB = snakeB.getSnakeBody().get(0);
+            for(int i = 3 ; i < snakeB.getSnakeBody().size();i++) {
+                if (snakeB.getSnakeBody().get(i).x == headB.x && snakeB.getSnakeBody().get(i).y == headB.y){
+                    allowKeyPress = false; //game over keyborad can't use
+        
+                    t.cancel(); //game over timer t stop
+                    t.purge();
+    
+                    resetUI();
+                }
+            }
+            snakeB.moveSnake(CELL_SIZE);
+        }
+        fruit.drawFruit(g);
     }
     
     private void reset() {
@@ -123,7 +122,9 @@ public class Main extends JPanel implements KeyListener {
         }
         allowKeyPress = true;
         snakeA = new Snake(0);
-        snakeB = new Snake(100);
+        if (enableB) {
+            snakeB = new Snake(100);
+        }
         setTimer();
     }
 
@@ -148,7 +149,9 @@ public class Main extends JPanel implements KeyListener {
     public void keyPressed(KeyEvent e) {
         // System.out.println("keyPressed");
         snakeA.changeDirection(e, allowKeyPress, true);
-        snakeB.changeDirection(e, allowKeyPress, false);
+        if (enableB) {
+            snakeB.changeDirection(e, allowKeyPress, false);
+        }
     }
 
     public void resetUI() {

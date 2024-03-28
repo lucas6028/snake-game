@@ -8,7 +8,7 @@ public class Fruit {
     public ImageIcon img;
     
     public Fruit() {
-        img = new ImageIcon("../images/fruits/fruit.png");    
+        // img = new ImageIcon("../images/fruits/fruit.png");    
         this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE);
         this.y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE); 
     }
@@ -32,8 +32,8 @@ public class Fruit {
     }
 
     public void setNewLocation(Snake s) {
-        int new_x = this.x;
-        int new_y = this.y;
+        int new_x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE);
+        int new_y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
         boolean overlapping = check_overlap(new_x, new_y, s);
 
         while (overlapping) { 

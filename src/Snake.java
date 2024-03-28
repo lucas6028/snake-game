@@ -14,9 +14,9 @@ public class Snake {
     public Snake(int y) {
         snakeBody = new ArrayList<>();
         snakeBody.add(new Node(80, y));
-        snakeBody.add(new Node(60, y));
-        snakeBody.add(new Node(40, y));
-        snakeBody.add(new Node(20, y));
+        snakeBody.add(new Node(65, y));
+        snakeBody.add(new Node(50, y));
+        snakeBody.add(new Node(35, y));
     }
 
     public ArrayList<Node> getSnakeBody() {
@@ -29,6 +29,7 @@ public class Snake {
             if (i == 0) {
                 if (isA) {
                     g.setColor(Color.GREEN);
+                    // g.drawRect(snakeX, snakeY, Main.CELL_SIZE, Main.CELL_SIZE);
                 }
                 else {
                     g.setColor(Color.RED);
@@ -133,28 +134,21 @@ public class Snake {
             }
         }
     }
-
     public void checkEatFruit(Fruit fruit, Graphics g) {
-        // Node newHead = new Node(snakeX, snakeY);
+        int snakeHeadX = this.getSnakeBody().get(0).x;
+        int snakeHeadY = this.getSnakeBody().get(0).y;
+        int fruitX = fruit.getX();
+        int fruitY = fruit.getY();
         
-        if (this.getSnakeBody().get(0).x == fruit.getX() &&
-            this.getSnakeBody().get(0).y == fruit.getY()) {
-                // set fruit to new location
-                fruit.setNewLocation(this);
-
-                // draw fruit
-                fruit.drawFruit(g);
-
-                ScoreFile.score++;
-                eatFruit = true;
-            }
-        else {
+        if (Math.abs(snakeHeadX - fruitX) <= (Main.CELL_SIZE / 2) && Math.abs(snakeHeadY - fruitY) <= (Main.CELL_SIZE / 2)) {
+            System.out.println("Eat the fruit");
+            fruit.setNewLocation(this); // set fruit to new location
+            fruit.drawFruit(g);
+            ScoreFile.score++;
+            eatFruit = true;
+        } else {
             eatFruit = false;
-            // this.getSnakeBody().remove(this.getSnakeBody().size() - 1);
         }
-
-        // Snake move
-        // Remove the tail and put it in head
-        // this.getSnakeBody().add(0, newHead);
     }
+
 }
