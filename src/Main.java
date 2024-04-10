@@ -1,16 +1,25 @@
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Graphics;
 import java.awt.Dimension;
+import java.awt.CardLayout;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 // Graphic UI
 public class Main extends JPanel implements KeyListener {
+    private CardLayout cardLayout;
+    private JPanel openingScreen;
+
     // Size of frame variables
     public static final int CELL_SIZE = 15;
     public static int width = 600;
@@ -46,6 +55,83 @@ public class Main extends JPanel implements KeyListener {
         // Set JPanel properties
         setPreferredSize(new Dimension(backgroundImage.getIconWidth(), backgroundImage.getIconHeight()));
 
+        // Switch screen 
+        cardLayout = new CardLayout();
+        this.setLayout(cardLayout);
+
+        // Setting openning screen
+        openingScreen = new JPanel();
+        JButton buttonSingle = new JButton("Single Player");
+        JButton buttonTwo = new JButton("Two Player");
+        buttonSingle.setHorizontalTextPosition(JButton.CENTER);
+        buttonTwo.setHorizontalTextPosition(JButton.CENTER);
+        openingScreen.add(buttonSingle);
+        openingScreen.add(buttonTwo);
+        openingScreen.add(new JLabel("Opening Screen"));
+
+        buttonSingle.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                enableB = false;
+                switchScreen("Game");
+            }
+        });
+        buttonTwo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                enableB = true;
+                switchScreen("Game");
+            }
+        });
+
+        // Setting game screen
+        JPanel gameScreen = new JPanel() {
+            @Override
+            public void paintComponent(Graphics g) {
+                g.fillRect(0, 0, width, height);
+                g.drawImage(backgroundImage.getImage(), 0, 0, null);
+
+                // Snake A
+                snakeA.drawSnake(g, true);
+                snakeA.checkEatFruit(fruit, g);
+                headA = snakeA.getSnakeBody().get(0);
+                for(int i = 3 ; i < snakeA.getSnakeBody().size();i++){
+                    if (snakeA.getSnakeBody().get(i).x == headA.x && snakeA.getSnakeBody().get(i).y == headA.y){
+                        allowKeyPress = false; //game over keyborad can't use
+                        
+                        t.cancel(); //game over timer t stop
+                        t.purge();
+                        
+                        resetUI();
+                    }
+                }
+                snakeA.moveSnake(CELL_SIZE);
+                
+                // Snake B
+                if (enableB) {
+                    // snakeB = new Snake(100);
+                    snakeB.drawSnake(g, false);
+                    snakeB.checkEatFruit(fruit, g);
+                    headB = snakeB.getSnakeBody().get(0);
+                    for(int i = 3 ; i < snakeB.getSnakeBody().size();i++) {
+                        if (snakeB.getSnakeBody().get(i).x == headB.x && snakeB.getSnakeBody().get(i).y == headB.y){
+                            allowKeyPress = false; //game over keyborad can't use
+                
+                            t.cancel(); //game over timer t stop
+                            t.purge();
+            
+                            resetUI();
+                        }
+                    }
+                    snakeB.moveSnake(CELL_SIZE);
+                }
+                fruit.drawFruit(g);
+            }
+        };
+        gameScreen.add(new JLabel("Game"));
+
+        // Add screens to the container panel
+        this.add(openingScreen, "Opening Screen");
+        this.add(gameScreen, "Game");
+
         // Detect the keyboard
         setFocusable(true);
         addKeyListener(this);
@@ -69,47 +155,6 @@ public class Main extends JPanel implements KeyListener {
         }, 0, speed);
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        g.fillRect(0, 0, width, height);
-        g.drawImage(backgroundImage.getImage(), 0, 0, null);
-
-        // Snake A
-        snakeA.drawSnake(g, true);
-        snakeA.checkEatFruit(fruit, g);
-        headA = snakeA.getSnakeBody().get(0);
-        for(int i = 3 ; i < snakeA.getSnakeBody().size();i++){
-            if (snakeA.getSnakeBody().get(i).x == headA.x && snakeA.getSnakeBody().get(i).y == headA.y){
-                allowKeyPress = false; //game over keyborad can't use
-                
-                t.cancel(); //game over timer t stop
-                t.purge();
-                
-                resetUI();
-            }
-        }
-        snakeA.moveSnake(CELL_SIZE);
-        
-        // Snake B
-        if (enableB) {
-            // snakeB = new Snake(100);
-            snakeB.drawSnake(g, false);
-            snakeB.checkEatFruit(fruit, g);
-            headB = snakeB.getSnakeBody().get(0);
-            for(int i = 3 ; i < snakeB.getSnakeBody().size();i++) {
-                if (snakeB.getSnakeBody().get(i).x == headB.x && snakeB.getSnakeBody().get(i).y == headB.y){
-                    allowKeyPress = false; //game over keyborad can't use
-        
-                    t.cancel(); //game over timer t stop
-                    t.purge();
-    
-                    resetUI();
-                }
-            }
-            snakeB.moveSnake(CELL_SIZE);
-        }
-        fruit.drawFruit(g);
-    }
     
     private void reset() {
         // highest_score = 0;
@@ -134,9 +179,16 @@ public class Main extends JPanel implements KeyListener {
     }
 
     public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new Main();
+            }
+        });
         // Graphic UI
         JFrame window = new JFrame("Snake Game");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // window.setSize(1000, width);
+    
         window.setContentPane(new Main());
         window.pack();
         window.setLocationRelativeTo(null);
@@ -201,5 +253,9 @@ public class Main extends JPanel implements KeyListener {
         // System.out.println("keyReleased");
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+    }
+
+    public void switchScreen(String screenName) {
+        cardLayout.show(this, screenName); // have to determine whether this !!!
     }
 }
