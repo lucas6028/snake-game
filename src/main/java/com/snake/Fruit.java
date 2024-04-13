@@ -1,3 +1,5 @@
+package com.snake;
+
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -32,6 +34,8 @@ public class Fruit {
     }
 
     public void setNewLocation(Snake s) {
+        // int new_x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE + Main.boundaryWidth);
+        // int new_y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE + Main.boundaryHeight);
         int new_x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE);
         int new_y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE);
         boolean overlapping = check_overlap(new_x, new_y, s);
@@ -58,3 +62,4 @@ public class Fruit {
         return false;
     } 
 }
+

@@ -1,29 +1,41 @@
+package com.snake;
+
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 // Graphic UI
 public class Main extends JPanel implements KeyListener {
     private CardLayout cardLayout;
-    private JPanel openingScreen;
+    private JPanel openingScreen = new JPanel();
 
     // Size of frame variables
     public static final int CELL_SIZE = 15;
-    public static int width = 600;
-    public static int height = 600;
+    // public static final int width = 624;
+    public static final int width = 600;
+    // public static final int boundaryWidth = 10;
+    public static final int height = 600;
+    // public static final int height = 480;
+    // public static final int boundaryHeight = 220;
     public static int row = height / CELL_SIZE;
     public static int column = width / CELL_SIZE;
 
@@ -33,11 +45,12 @@ public class Main extends JPanel implements KeyListener {
     
     public static boolean allowKeyPress = true;
     public static boolean enableB = false;
+    public static boolean enableCrossBorder = false;
 
     // can be moved to the body of paintComponent()
     public static Fruit fruit = new Fruit();
-    public static Snake snakeA = new Snake(0);
-    public static Snake snakeB = new Snake(100);
+    public static Snake snakeA = new Snake(200);
+    public static Snake snakeB = new Snake(300);
 
     public static ScoreFile file = new ScoreFile();
 
@@ -46,11 +59,9 @@ public class Main extends JPanel implements KeyListener {
 
     private ImageIcon backgroundImage;
 
-    private static final String background = "../images/background/navy_blue.jpg";
-
     public Main() {
         // Load the background image
-        backgroundImage = new ImageIcon(background);
+        backgroundImage = ImageLoader.loadImageIconFromResource(ImageLoader.background);
 
         // Set JPanel properties
         setPreferredSize(new Dimension(backgroundImage.getIconWidth(), backgroundImage.getIconHeight()));
@@ -59,12 +70,18 @@ public class Main extends JPanel implements KeyListener {
         cardLayout = new CardLayout();
         this.setLayout(cardLayout);
 
-        // Setting openning screen
-        openingScreen = new JPanel();
-        JButton buttonSingle = new JButton("Single Player");
-        JButton buttonTwo = new JButton("Two Player");
+        // openingScreen.setLayout(new BoxLayout(openingScreen, BoxLayout.Y_AXIS));
+        JButton buttonSingle = new JButton();
+        JButton buttonTwo = new JButton();
+        ImageIcon singleImage = ImageLoader.loadImageIconFromResource(ImageLoader.singleButtonImage);
+        ImageIcon twoImage = ImageLoader.loadImageIconFromResource(ImageLoader.twoButtonImage);
+        buttonSingle.setIcon(singleImage);
+        buttonSingle.setPreferredSize(new Dimension(150, 150));
+        buttonTwo.setIcon(twoImage);
+        buttonTwo.setPreferredSize(new Dimension(150, 150));
         buttonSingle.setHorizontalTextPosition(JButton.CENTER);
         buttonTwo.setHorizontalTextPosition(JButton.CENTER);
+        openingScreen.setBackground(Color.BLACK);
         openingScreen.add(buttonSingle);
         openingScreen.add(buttonTwo);
         openingScreen.add(new JLabel("Opening Screen"));
@@ -89,6 +106,20 @@ public class Main extends JPanel implements KeyListener {
                 g.fillRect(0, 0, width, height);
                 g.drawImage(backgroundImage.getImage(), 0, 0, null);
 
+                // super.paintComponent(g);
+                // Graphics2D g2 = (Graphics2D) g;
+
+                // for (int i = 0; i < 17; i++) {
+                //     // Adjust the position of each rectangle
+                //     double x = 227.0 - i * 2; // Shift x-coordinate by 2 units per iteration
+                //     double y = 127.0 + i * 2; // Shift y-coordinate downwards by 2 units per iteration
+
+                //     Rectangle2D.Double rect = new Rectangle2D.Double(x, y, 624, 480);
+
+                //     g2.setColor(Color.BLUE);
+                //     g2.draw(rect);
+                // }
+
                 // Snake A
                 snakeA.drawSnake(g, true);
                 snakeA.checkEatFruit(fruit, g);
@@ -102,6 +133,14 @@ public class Main extends JPanel implements KeyListener {
                         
                         resetUI();
                     }
+                }
+                if (snakeA.isCrossBorder() == true && !enableCrossBorder) {
+                    allowKeyPress = false; //game over keyborad can't use
+                    
+                    t.cancel(); //game over timer t stop
+                    t.purge();
+                    
+                    resetUI();
                 }
                 snakeA.moveSnake(CELL_SIZE);
                 
@@ -121,11 +160,20 @@ public class Main extends JPanel implements KeyListener {
                             resetUI();
                         }
                     }
+                    if (snakeB.isCrossBorder() == true && !enableCrossBorder) {
+                        allowKeyPress = false; //game over keyborad can't use
+                        
+                        t.cancel(); //game over timer t stop
+                        t.purge();
+                        
+                        resetUI();
+                    }
                     snakeB.moveSnake(CELL_SIZE);
                 }
                 fruit.drawFruit(g);
             }
         };
+        gameScreen.setBackground(Color.BLACK);
         gameScreen.add(new JLabel("Game"));
 
         // Add screens to the container panel
@@ -187,8 +235,9 @@ public class Main extends JPanel implements KeyListener {
         // Graphic UI
         JFrame window = new JFrame("Snake Game");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // window.setSize(1000, width);
-    
+        // window.setBounds(100, 5, 1100, 700);
+        // window.setSize(width, height);
+        // window.setContentPane(new Main());
         window.setContentPane(new Main());
         window.pack();
         window.setLocationRelativeTo(null);
@@ -243,14 +292,12 @@ public class Main extends JPanel implements KeyListener {
     // Additional Code by VS code
     @Override
     public void keyTyped(KeyEvent e) {
-        // System.out.println("keyTyped");
         // TODO Auto-generated method stub
         // throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // System.out.println("keyReleased");
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }

@@ -1,3 +1,5 @@
+package com.snake;
+
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -13,7 +15,7 @@ public class Snake {
 
     public Snake(int y) {
         snakeBody = new ArrayList<>();
-        snakeBody.add(new Node(80, y));
+        snakeBody.add(new Node(80 , y));
         snakeBody.add(new Node(65, y));
         snakeBody.add(new Node(50, y));
         snakeBody.add(new Node(35, y));
@@ -47,24 +49,49 @@ public class Snake {
 
             // Handle the border
             Node n = snakeBody.get(i);
-            // x-axis
-            if (n.x >= Main.width) {
-                n.x = 0;
-            }
-            if (n.x < 0) {
-                n.x = Main.width - Main.CELL_SIZE;
-            }
-            // y-axis
-            if (n.y >= Main.height) {
-                n.y = 0;
-            }
-            if (n.y < 0) {
-                n.y = Main.height - Main.CELL_SIZE;
+            if (Main.enableCrossBorder) {
+                // x-axis
+                // if (n.x >= 819) {
+                if (n.x >= Main.width) {
+                    n.x = 0;
+                }
+                // if (n.x < 227) {
+                if (n.x < 0) {
+                    n.x = Main.width - Main.CELL_SIZE;
+                }
+                // y-axis
+                // if (n.y >= 591) {
+                if (n.y >= Main.height) {
+                    n.y = 0;
+                }
+                // if (n.y < 127) {
+                if (n.y < 0) {
+                    n.y = Main.height - Main.CELL_SIZE;
+                }
             }
 
             g.fillOval(n.x, n.y, Main.CELL_SIZE, Main.CELL_SIZE);
             
         }
+    }
+
+    public boolean isCrossBorder () {
+        Node n = this.getSnakeBody().get(0);
+        // x-axis
+        if (n.x >= Main.width) {
+            return true;
+        }
+        if (n.x < 0) {
+            return true;
+        }
+        // y-axis
+        if (n.y >= Main.height) {
+            return true;
+        }
+        if (n.y < 0) {
+            return true;
+        }
+        return false;
     }
 
     public void moveSnake(int CELL_SIZE) {
@@ -150,5 +177,4 @@ public class Snake {
             eatFruit = false;
         }
     }
-
 }

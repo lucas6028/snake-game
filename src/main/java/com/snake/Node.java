@@ -1,3 +1,5 @@
+package com.snake;
+
 public class Node {
     int x;
     int y;
@@ -7,3 +9,4 @@ public class Node {
         this.y = y;
     }
 }
+

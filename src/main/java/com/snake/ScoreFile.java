@@ -1,6 +1,10 @@
+package com.snake;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.util.Scanner;
 
@@ -9,7 +13,8 @@ public class ScoreFile {
     public static int score = 0;
     public static int highest_score;
     
-    private static final String recordsFileName = "../records/filename.txt";
+    private static final String recordsFileName = "src/main/resources/filename.txt";
+    // private InputStream inputStream = ScoreFile.class.getClassLoader().getResourceAsStream(recordsFileName);
 
     public ScoreFile() {
 
@@ -18,15 +23,16 @@ public class ScoreFile {
     public void write_a_file(int score) {
         // If the score is higher than records, record new score
         try{
-            FileWriter fw = new FileWriter(recordsFileName);
+            // BufferedWriter writer = new BufferedWriter(new FileWriter(recordsFileName));
+            FileWriter writer = new FileWriter(recordsFileName);
             if (score > highest_score){
-                fw.write("" + score);
+                writer.write("" + score);
                 highest_score = score;
         // Keep the original score
             } else {
-                fw.write("" + highest_score);
+                writer.write("" + highest_score);
             }
-            fw.close();
+            writer.close();
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -56,3 +62,4 @@ public class ScoreFile {
         }
     }
 }
+
