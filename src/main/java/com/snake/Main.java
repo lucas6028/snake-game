@@ -30,10 +30,14 @@ public class Main extends JPanel implements KeyListener {
 
     // Size of frame variables
     public static final int CELL_SIZE = 15;
+    public static final int rightBorder = 819;
+    public static final int leftBorder = 227;
+    public static final int bottomBorder = 607;
+    public static final int topBorder = 159;
     // public static final int width = 624;
-    public static final int width = 600;
+    public static final int width = rightBorder - leftBorder; // 592
     // public static final int boundaryWidth = 10;
-    public static final int height = 600;
+    public static final int height = bottomBorder - topBorder; // 448
     // public static final int height = 480;
     // public static final int boundaryHeight = 220;
     public static int row = height / CELL_SIZE;
@@ -45,7 +49,7 @@ public class Main extends JPanel implements KeyListener {
     
     public static boolean allowKeyPress = true;
     public static boolean enableB = false;
-    public static boolean enableCrossBorder = false;
+    public static boolean enableCrossBorder = true;
 
     // can be moved to the body of paintComponent()
     public static Fruit fruit = new Fruit();
@@ -64,7 +68,7 @@ public class Main extends JPanel implements KeyListener {
         backgroundImage = ImageLoader.loadImageIconFromResource(ImageLoader.background);
 
         // Set JPanel properties
-        setPreferredSize(new Dimension(backgroundImage.getIconWidth(), backgroundImage.getIconHeight()));
+        // setPreferredSize(new Dimension(backgroundImage.getIconWidth(), backgroundImage.getIconHeight()));
 
         // Switch screen 
         cardLayout = new CardLayout();
@@ -103,22 +107,22 @@ public class Main extends JPanel implements KeyListener {
         JPanel gameScreen = new JPanel() {
             @Override
             public void paintComponent(Graphics g) {
-                g.fillRect(0, 0, width, height);
-                g.drawImage(backgroundImage.getImage(), 0, 0, null);
+                // g.fillRect(0, 0, width, height);
+                // g.drawImage(backgroundImage.getImage(), 0, 0, null);
 
-                // super.paintComponent(g);
-                // Graphics2D g2 = (Graphics2D) g;
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g;
 
-                // for (int i = 0; i < 17; i++) {
-                //     // Adjust the position of each rectangle
-                //     double x = 227.0 - i * 2; // Shift x-coordinate by 2 units per iteration
-                //     double y = 127.0 + i * 2; // Shift y-coordinate downwards by 2 units per iteration
+                for (int i = 0; i < 17; i++) {
+                    // Adjust the position of each rectangle
+                    double x = 227.0 - i * 2; // Shift x-coordinate by 2 units per iteration
+                    double y = 127.0 + i * 2; // Shift y-coordinate downwards by 2 units per iteration
 
-                //     Rectangle2D.Double rect = new Rectangle2D.Double(x, y, 624, 480);
+                    Rectangle2D.Double rect = new Rectangle2D.Double(x, y, 624, 480);
 
-                //     g2.setColor(Color.BLUE);
-                //     g2.draw(rect);
-                // }
+                    g2.setColor(Color.BLUE);
+                    g2.draw(rect);
+                }
 
                 // Snake A
                 snakeA.drawSnake(g, true);
@@ -235,11 +239,10 @@ public class Main extends JPanel implements KeyListener {
         // Graphic UI
         JFrame window = new JFrame("Snake Game");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // window.setBounds(100, 5, 1100, 700);
+        window.setBounds(100, 5, 1100, 700);
         // window.setSize(width, height);
-        // window.setContentPane(new Main());
         window.setContentPane(new Main());
-        window.pack();
+        // window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         window.setResizable(false);

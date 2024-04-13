@@ -15,10 +15,10 @@ public class Snake {
 
     public Snake(int y) {
         snakeBody = new ArrayList<>();
-        snakeBody.add(new Node(80 , y));
-        snakeBody.add(new Node(65, y));
-        snakeBody.add(new Node(50, y));
-        snakeBody.add(new Node(35, y));
+        snakeBody.add(new Node(245 , y));
+        snakeBody.add(new Node(230, y));
+        snakeBody.add(new Node(215, y));
+        snakeBody.add(new Node(200, y));
     }
 
     public ArrayList<Node> getSnakeBody() {
@@ -51,22 +51,18 @@ public class Snake {
             Node n = snakeBody.get(i);
             if (Main.enableCrossBorder) {
                 // x-axis
-                // if (n.x >= 819) {
-                if (n.x >= Main.width) {
-                    n.x = 0;
+                if (n.x >= Main.rightBorder) {
+                    n.x = Main.leftBorder;
                 }
-                // if (n.x < 227) {
-                if (n.x < 0) {
-                    n.x = Main.width - Main.CELL_SIZE;
+                if (n.x < Main.leftBorder) {
+                    n.x = Main.rightBorder - Main.CELL_SIZE;
                 }
                 // y-axis
-                // if (n.y >= 591) {
-                if (n.y >= Main.height) {
-                    n.y = 0;
+                if (n.y >= Main.bottomBorder) {
+                    n.y = Main.topBorder;
                 }
-                // if (n.y < 127) {
-                if (n.y < 0) {
-                    n.y = Main.height - Main.CELL_SIZE;
+                if (n.y < Main.topBorder) {
+                    n.y = Main.bottomBorder - Main.CELL_SIZE;
                 }
             }
 
@@ -78,17 +74,17 @@ public class Snake {
     public boolean isCrossBorder () {
         Node n = this.getSnakeBody().get(0);
         // x-axis
-        if (n.x >= Main.width) {
+        if (n.x >= Main.rightBorder) {
             return true;
         }
-        if (n.x < 0) {
+        if (n.x < Main.leftBorder) {
             return true;
         }
         // y-axis
-        if (n.y >= Main.height) {
+        if (n.y >= Main.bottomBorder) {
             return true;
         }
-        if (n.y < 0) {
+        if (n.y < Main.topBorder) {
             return true;
         }
         return false;
