@@ -34,30 +34,25 @@ public class Main extends JPanel implements KeyListener {
     public static final int leftBorder = 227;
     public static final int bottomBorder = 607;
     public static final int topBorder = 159;
-    // public static final int width = 624;
     public static final int width = rightBorder - leftBorder; // 592
-    // public static final int boundaryWidth = 10;
     public static final int height = bottomBorder - topBorder; // 448
-    // public static final int height = 480;
-    // public static final int boundaryHeight = 220;
-    public static int row = height / CELL_SIZE;
-    public static int column = width / CELL_SIZE;
+    public static final int row = height / CELL_SIZE;
+    public static final int column = width / CELL_SIZE;
 
     // Setting speed variables
     private Timer t;
     private int speed = 50;
     
-    public static boolean allowKeyPress = true;
+    public static boolean allowKeyPress = false;
     public static boolean enableB = false;
     public static boolean enableCrossBorder = true;
 
     // can be moved to the body of paintComponent()
     public static Fruit fruit = new Fruit();
+    public static Bomb bomb = new Bomb();
     public static Snake snakeA = new Snake(200);
     public static Snake snakeB = new Snake(300);
-
     public static ScoreFile file = new ScoreFile();
-
     private Node headA;
     private Node headB;
 
@@ -175,6 +170,7 @@ public class Main extends JPanel implements KeyListener {
                     snakeB.moveSnake(CELL_SIZE);
                 }
                 fruit.drawFruit(g);
+                bomb.drawFruit(g);
             }
         };
         gameScreen.setBackground(Color.BLACK);
@@ -190,10 +186,6 @@ public class Main extends JPanel implements KeyListener {
         setTimer();
 
         file.read_hightes_score();
-        
-        if (!allowKeyPress) {
-            resetUI();
-        }
     }
 
     // Setting speed
@@ -251,6 +243,7 @@ public class Main extends JPanel implements KeyListener {
     // Move the snake by Keyboard 
     @Override
     public void keyPressed(KeyEvent e) {
+        allowKeyPress = true;
         // System.out.println("keyPressed");
         snakeA.changeDirection(e, allowKeyPress, true);
         if (enableB) {
