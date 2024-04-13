@@ -49,24 +49,24 @@ public class Snake {
 
             // Handle the border
             Node n = snakeBody.get(i);
-            if (Main.enableCrossBorder) {
+            if (ContainerPanel.enableCrossBorder) {
                 // x-axis
-                if (n.x >= Main.rightBorder) {
-                    n.x = Main.leftBorder;
+                if (n.x >= ContainerPanel.rightBorder) {
+                    n.x = ContainerPanel.leftBorder;
                 }
-                if (n.x < Main.leftBorder) {
-                    n.x = Main.rightBorder - Main.CELL_SIZE;
+                if (n.x < ContainerPanel.leftBorder) {
+                    n.x = ContainerPanel.rightBorder - ContainerPanel.CELL_SIZE;
                 }
                 // y-axis
-                if (n.y >= Main.bottomBorder) {
-                    n.y = Main.topBorder;
+                if (n.y >= ContainerPanel.bottomBorder) {
+                    n.y = ContainerPanel.topBorder;
                 }
-                if (n.y < Main.topBorder) {
-                    n.y = Main.bottomBorder - Main.CELL_SIZE;
+                if (n.y < ContainerPanel.topBorder) {
+                    n.y = ContainerPanel.bottomBorder - ContainerPanel.CELL_SIZE;
                 }
             }
 
-            g.fillOval(n.x, n.y, Main.CELL_SIZE, Main.CELL_SIZE);
+            g.fillOval(n.x, n.y, ContainerPanel.CELL_SIZE, ContainerPanel.CELL_SIZE);
             
         }
     }
@@ -74,17 +74,17 @@ public class Snake {
     public boolean isCrossBorder () {
         Node n = this.getSnakeBody().get(0);
         // x-axis
-        if (n.x >= Main.rightBorder) {
+        if (n.x >= ContainerPanel.rightBorder) {
             return true;
         }
-        if (n.x < Main.leftBorder) {
+        if (n.x < ContainerPanel.leftBorder) {
             return true;
         }
         // y-axis
-        if (n.y >= Main.bottomBorder) {
+        if (n.y >= ContainerPanel.bottomBorder) {
             return true;
         }
-        if (n.y < Main.topBorder) {
+        if (n.y < ContainerPanel.topBorder) {
             return true;
         }
         return false;
@@ -163,7 +163,7 @@ public class Snake {
         int fruitX = fruit.getX();
         int fruitY = fruit.getY();
         
-        if (Math.abs(snakeHeadX - fruitX) <= (Main.CELL_SIZE / 2) && Math.abs(snakeHeadY - fruitY) <= (Main.CELL_SIZE / 2)) {
+        if (Math.abs(snakeHeadX - fruitX) <= (ContainerPanel.CELL_SIZE / 2) && Math.abs(snakeHeadY - fruitY) <= (ContainerPanel.CELL_SIZE / 2)) {
             System.out.println("Eat the fruit");
             fruit.setNewLocation(this); // set fruit to new location
             fruit.drawFruit(g);

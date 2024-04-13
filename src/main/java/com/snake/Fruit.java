@@ -11,8 +11,8 @@ public class Fruit {
     
     public Fruit() {
         // img = new ImageIcon("../images/fruits/fruit.png");    
-        this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE + Main.leftBorder);
-        this.y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE + Main.topBorder); 
+        this.x = (int) (Math.floor(Math.random() * ContainerPanel.column) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
+        this.y = (int) (Math.floor(Math.random() * ContainerPanel.row) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder); 
     }
     
     public int getX() {
@@ -29,18 +29,18 @@ public class Fruit {
         }
         else {
             g.setColor(Color.GREEN);
-            g.fillOval(this.x, this.y, Main.CELL_SIZE, Main.CELL_SIZE);
+            g.fillOval(this.x, this.y, ContainerPanel.CELL_SIZE, ContainerPanel.CELL_SIZE);
         }
     }
 
     public void setNewLocation(Snake s) {
-        int new_x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE + Main.leftBorder);
-        int new_y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE + Main.topBorder);
+        int new_x = (int) (Math.floor(Math.random() * ContainerPanel.column) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
+        int new_y = (int) (Math.floor(Math.random() * ContainerPanel.row) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder);
         boolean overlapping = check_overlap(new_x, new_y, s);
 
         while (overlapping) { 
-            new_x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE + Main.leftBorder);
-            new_y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE + Main.topBorder);
+            new_x = (int) (Math.floor(Math.random() * ContainerPanel.column) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
+            new_y = (int) (Math.floor(Math.random() * ContainerPanel.row) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder);
             overlapping = check_overlap(new_x, new_y, s);
         }
 

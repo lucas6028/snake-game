@@ -9,10 +9,10 @@ public class Bomb extends Fruit {
     private int x, y;
     public Bomb() {
         // img = new ImageIcon("../images/fruits/fruit.png");    
-        this.x = (int) (Math.floor(Math.random() * Main.column) * Main.CELL_SIZE + Main.leftBorder);
-        this.y = (int) (Math.floor(Math.random() * Main.row) * Main.CELL_SIZE + Main.topBorder); 
+        this.x = (int) (Math.floor(Math.random() * ContainerPanel.column) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
+        this.y = (int) (Math.floor(Math.random() * ContainerPanel.row) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder); 
     }
-    
+
     @Override
     public void drawFruit(Graphics g) {
         if (img != null) {
@@ -20,7 +20,7 @@ public class Bomb extends Fruit {
         }
         else {
             g.setColor(Color.YELLOW);
-            g.fillOval(this.x, this.y, Main.CELL_SIZE, Main.CELL_SIZE);
+            g.fillOval(this.x, this.y, ContainerPanel.CELL_SIZE, ContainerPanel.CELL_SIZE);
         }
     }
     
