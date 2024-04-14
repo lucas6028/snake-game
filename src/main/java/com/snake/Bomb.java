@@ -9,7 +9,7 @@ public class Bomb extends Fruit {
     private int x, y;
     
     public Bomb() {
-        // img = new ImageIcon("../images/fruits/fruit.png");    
+        img = ImageLoader.loadImageIconFromResource(ImageLoader.bombImage);    
         this.x = (int) (Math.floor(Math.random() * ContainerPanel.column) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
         this.y = (int) (Math.floor(Math.random() * ContainerPanel.row) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder); 
     }

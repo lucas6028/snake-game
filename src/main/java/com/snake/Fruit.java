@@ -10,7 +10,7 @@ public class Fruit {
     public ImageIcon img;
     
     public Fruit() {
-        // img = new ImageIcon("../images/fruits/fruit.png");    
+        img = ImageLoader.loadImageIconFromResource(ImageLoader.fruitImage);    
         this.x = (int) (Math.floor(Math.random() * ContainerPanel.column) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
         this.y = (int) (Math.floor(Math.random() * ContainerPanel.row) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder); 
     }
