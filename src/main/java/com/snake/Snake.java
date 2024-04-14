@@ -157,15 +157,16 @@ public class Snake {
             }
         }
     }
-    public void checkEatFruit(Fruit fruit, Graphics g) {
+    public void checkEatFruit(Fruit fruit, Bomb bomb, Graphics g) {
         int snakeHeadX = this.getSnakeBody().get(0).x;
         int snakeHeadY = this.getSnakeBody().get(0).y;
         int fruitX = fruit.getX();
         int fruitY = fruit.getY();
         
-        if (Math.abs(snakeHeadX - fruitX) <= (ContainerPanel.CELL_SIZE / 2) && Math.abs(snakeHeadY - fruitY) <= (ContainerPanel.CELL_SIZE / 2)) {
+        if (Math.abs(snakeHeadX - fruitX) <= (ContainerPanel.CELL_SIZE / 2) && 
+            Math.abs(snakeHeadY - fruitY) <= (ContainerPanel.CELL_SIZE / 2)) {
             System.out.println("Eat the fruit");
-            fruit.setNewLocation(this); // set fruit to new location
+            fruit.setNewLocation(this, bomb); // set fruit to new location
             fruit.drawFruit(g);
             ScoreFile.score++;
             eatFruit = true;

@@ -18,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class ContainerPanel extends JPanel implements KeyListener{
     private CardLayout cardLayout;
     private JPanel openingScreen = new JPanel();
@@ -41,14 +40,12 @@ public class ContainerPanel extends JPanel implements KeyListener{
     public static boolean allowKeyPress = false;
     public static boolean enableB = false;
     public static boolean enableCrossBorder = true;
-
-    // can be moved to the body of paintComponent()
-
+    public static boolean enableBomb = true;
+    
+    private ImageIcon backgroundImage;
+    
     private Node headA;
     private Node headB;
-
-    private ImageIcon backgroundImage;
-
     public static Fruit fruit = new Fruit();
     public static Bomb bomb = new Bomb();
     public static Snake snakeA = new Snake(200);
@@ -118,8 +115,14 @@ public class ContainerPanel extends JPanel implements KeyListener{
     
                 // Snake A
                 snakeA.drawSnake(g, true);
-                snakeA.checkEatFruit(fruit, g);
+                snakeA.checkEatFruit(fruit, bomb, g);
                 headA = snakeA.getSnakeBody().get(0);
+                if (bomb.touchBomb(snakeA)) {
+                    allowKeyPress = false;
+                    t.cancel();
+                    t.purge();
+                    resetUI();
+                }
                 for(int i = 3 ; i < snakeA.getSnakeBody().size();i++){
                     if (snakeA.getSnakeBody().get(i).x == headA.x && snakeA.getSnakeBody().get(i).y == headA.y){
                         allowKeyPress = false; //game over keyborad can't use
@@ -144,8 +147,14 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 if (enableB) {
                     // snakeB = new Snake(100);
                     snakeB.drawSnake(g, false);
-                    snakeB.checkEatFruit(fruit, g);
+                    snakeB.checkEatFruit(fruit, bomb, g);
                     headB = snakeB.getSnakeBody().get(0);
+                    if (bomb.touchBomb(snakeB)) {
+                        allowKeyPress = false;
+                        t.cancel();
+                        t.purge();
+                        resetUI();
+                    }
                     for(int i = 3 ; i < snakeB.getSnakeBody().size();i++) {
                         if (snakeB.getSnakeBody().get(i).x == headB.x && snakeB.getSnakeBody().get(i).y == headB.y){
                             allowKeyPress = false; //game over keyborad can't use
@@ -183,7 +192,6 @@ public class ContainerPanel extends JPanel implements KeyListener{
         setTimer();
     
         file.read_hightes_score();
-
     }
 
     // Setting speed
@@ -216,6 +224,8 @@ public class ContainerPanel extends JPanel implements KeyListener{
             snakeB = new Snake(100);
         }
         setTimer();
+        fruit.setNewLocation(snakeA, bomb);
+        bomb.setNewLocation(snakeA, fruit);
     }
 
     public void resetUI() {
@@ -262,7 +272,6 @@ public class ContainerPanel extends JPanel implements KeyListener{
             snakeB.changeDirection(e, allowKeyPress, false);
         }
     }
-    // Additional Code by VS code
     @Override
     public void keyTyped(KeyEvent e) {
         // TODO Auto-generated method stub
