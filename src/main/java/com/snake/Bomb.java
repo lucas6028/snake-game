@@ -69,4 +69,12 @@ public class Bomb extends Fruit {
         }
         return false;
     }
+
+    public void setX(int n) {
+        this.x = n;
+    }
+
+    public void setY(int n) {
+        this.y = n;
+    }
 }

@@ -39,13 +39,14 @@ public class ContainerPanel extends JPanel implements KeyListener{
     private Timer t;
     // private Timer timerUI;
     private int speed = 50;
+    private int level = 1;
     public static JLabel scoreLabel = new JLabel();
     
     public static boolean allowKeyPress = false;
     public static boolean enableB = false;
     public static boolean enableCrossBorder = true;
-    public static boolean enableBomb = true;
-    // public static boolean enableStone = true;
+    public static boolean enableBomb = false;
+    public static boolean enableWall = true;
     
     private ImageIcon backgroundImage;
     
@@ -107,20 +108,12 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g;
     
-                for (int i = 0; i < 17; i++) {
-                    // Adjust the position of each rectangle
-                    double x = 227.0 - i * 2; // Shift x-coordinate by 2 units per iteration
-                    double y = 127.0 + i * 2; // Shift y-coordinate downwards by 2 units per iteration
-    
-                    Rectangle2D.Double rect = new Rectangle2D.Double(x, y, 624, 480);
-    
-                    g2.setColor(Color.BLUE);
-                    g2.draw(rect);
-                }
+                drawBorder(g2);
 
-                // if (!enableBomb) {
-                //     bomb = null;
-                // }
+                if (!enableBomb) {
+                    bomb.setX(-100);
+                    bomb.setY(-100);
+                }
     
                 // Snake A
                 snakeA.drawSnake(g, true);
@@ -175,7 +168,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
                         }
                     }
                     if (snakeB.isCrossBorder() == true && !enableCrossBorder) {
-                        allowKeyPress = false; //game over keyborad can't use
+                        allowKeyPress = false; // game over keyborad can't use
                         
                         t.cancel(); //game over timer t stop
                         t.purge();
@@ -185,10 +178,12 @@ public class ContainerPanel extends JPanel implements KeyListener{
                     snakeB.moveSnake(CELL_SIZE);
                 }
                 fruit.drawFruit(g);
-                bomb.drawFruit(g);
-
-                // updateLable();
                 drawStatusBar(g2);
+                if (enableBomb) {
+                    bomb.drawFruit(g);
+                }
+
+                changeLevel(g);
             }
         };
         gameScreen.setBackground(Color.BLACK);
@@ -219,17 +214,19 @@ public class ContainerPanel extends JPanel implements KeyListener{
     }
 
     public void switchScreen(String screenName) {
-        cardLayout.show(this, screenName); // have to determine whether this !!!
+        cardLayout.show(this, screenName);
     }
 
     public void drawStatusBar(Graphics2D g2) {
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+        g2.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         g2.drawString("Time: ", 210, 100);
         // g2.drawString("Level: ", 460, 100);
         g2.drawString("Your Score: ", 680, 100);
+        
+        // Leaderboard
         g2.drawString("Leaderboard", 900, 300);
-        g2.drawString("----------------", 900, 330);
+        g2.drawString("---------------", 870, 330);
         g2.drawString("1.", 900, 360);
         g2.drawString("2." , 900, 390);
         g2.drawString("3." , 900, 420);
@@ -242,6 +239,55 @@ public class ContainerPanel extends JPanel implements KeyListener{
         g2.drawString("" + ScoreFile.numbers.get(2), 950, 420);
         g2.drawString("" + ScoreFile.numbers.get(1), 950, 450);
         g2.drawString("" + ScoreFile.numbers.get(0), 950, 480);
+
+        // Level
+        int levelX = 390 + (30 * level);
+        g2.setColor(Color.GRAY);
+        g2.drawString("1", 420, 50);
+        g2.drawString("2", 450, 50);
+        g2.drawString("3", 480, 50);
+        g2.drawString("4", 510, 50);
+        g2.drawString("5", 540, 50);
+
+        g2.setColor(Color.YELLOW);
+        g2.drawString("" + level, levelX, 50);
+    }
+
+    public void changeLevel(Graphics g) {
+        int score = ScoreFile.score;
+        if (score < 99) {
+            level = 1;
+        }
+        else if (score > 99 && score < 199) {
+            level = 2;
+            if (!enableBomb) {
+                bomb.setNewLocation(snakeA, fruit);
+                bomb.drawFruit(g);
+            }
+            enableBomb = true;
+        }
+    }
+
+    public void drawBorder(Graphics2D g2) {
+        for (int i = 0; i < 17; i++) {
+            // Adjust the position of each rectangle
+            double x = 227.0 - i * 2; // Shift x-coordinate by 2 units per iteration
+            double y = 127.0 + i * 2; // Shift y-coordinate downwards by 2 units per iteration
+
+            Rectangle2D.Double rect = new Rectangle2D.Double(x, y, 624, 480);
+
+            switch(level) {
+                case 1:
+                    g2.setColor(Color.BLUE);
+                    break;
+                    case 2:
+                    g2.setColor(Color.GREEN);
+                    break;
+                    default:
+                    g2.setColor(Color.BLUE);
+                }
+            g2.draw(rect);
+        }
     }
         
     private void reset() {
@@ -259,7 +305,9 @@ public class ContainerPanel extends JPanel implements KeyListener{
         }
         setTimer();
         fruit.setNewLocation(snakeA, bomb);
-        bomb.setNewLocation(snakeA, fruit);
+        if (enableBomb) {
+            bomb.setNewLocation(snakeA, fruit);
+        }
     }
 
     public void resetUI() {
@@ -308,13 +356,11 @@ public class ContainerPanel extends JPanel implements KeyListener{
     }
     @Override
     public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
         // throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
 }
