@@ -1,22 +1,24 @@
 package com.snake;
 
-import javax.swing.JPanel;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.geom.Rectangle2D;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.CardLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.swing.JPanel;
 
 public class ContainerPanel extends JPanel implements KeyListener{
     private CardLayout cardLayout;
@@ -35,12 +37,15 @@ public class ContainerPanel extends JPanel implements KeyListener{
 
     // Setting speed variables
     private Timer t;
+    // private Timer timerUI;
     private int speed = 50;
+    public static JLabel scoreLabel = new JLabel();
     
     public static boolean allowKeyPress = false;
     public static boolean enableB = false;
     public static boolean enableCrossBorder = true;
     public static boolean enableBomb = true;
+    // public static boolean enableStone = true;
     
     private ImageIcon backgroundImage;
     
@@ -112,6 +117,10 @@ public class ContainerPanel extends JPanel implements KeyListener{
                     g2.setColor(Color.BLUE);
                     g2.draw(rect);
                 }
+
+                // if (!enableBomb) {
+                //     bomb = null;
+                // }
     
                 // Snake A
                 snakeA.drawSnake(g, true);
@@ -177,10 +186,15 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 }
                 fruit.drawFruit(g);
                 bomb.drawFruit(g);
+
+                // updateLable();
+                drawStatusBar(g2);
             }
         };
         gameScreen.setBackground(Color.BLACK);
         gameScreen.add(new JLabel("Game"));
+
+        gameScreen.add(scoreLabel);
     
         // Add screens to the container panel
         this.add(openingScreen, "Opening Screen");
@@ -208,9 +222,28 @@ public class ContainerPanel extends JPanel implements KeyListener{
     public void switchScreen(String screenName) {
         cardLayout.show(this, screenName); // have to determine whether this !!!
     }
+
+    public void drawStatusBar(Graphics2D g2) {
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+        g2.drawString("Time: ", 210, 100);
+        // g2.drawString("Level: ", 460, 100);
+        g2.drawString("Your Score: ", 680, 100);
+        g2.drawString("Leaderboard", 900, 300);
+        g2.drawString("----------------", 900, 330);
+        g2.setColor(Color.RED);
+        g2.drawString("" + ScoreFile.score * 10, 810, 100);
+    }
+
+    // public void updateLable() {
+    //     // Set and Update score label
+    //     scoreLabel.setText("Score: " + Integer.toString(ScoreFile.score * 10));
+    //     scoreLabel.setForeground(Color.WHITE);
+    //     scoreLabel.setBounds(rightBorder - 15, topBorder - 80, 200, 30);
+    //     // scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+    // }
         
     private void reset() {
-        // highest_score = 0;
         ScoreFile.score = 0;
         if (snakeA != null) {
             snakeA.getSnakeBody().clear();
@@ -232,7 +265,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
         int responese = JOptionPane.showOptionDialog(
             this,//1.parent container component
             "Game Over!! Your score is "
-            + ScoreFile.score
+            + (ScoreFile.score * 10)
             + ". The highest score was "
             + ScoreFile.highest_score
             + ". Would you like to start over?",//2.Set message to display
