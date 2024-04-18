@@ -1,33 +1,21 @@
-import javax.sound.sampled.*;
+public class MySoundPlayer {
 
-public class SoundPlayer {
+    public void playSound() throws IOException, UnsupportedAudioFileException {
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        URL soundURL = classLoader.getResource("sounds/mySound.wav"); // Adjust path if needed
 
-    public static void main(String[] args) {
-        playSound("sounds/your_wav_file.wav");
-    }
-
-    public static void playSound(String soundFilePath) {
-        try {
-            // Load the sound file
-            Clip clip = AudioSystem.getClip();
-            AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                    SoundPlayer.class.getResourceAsStream(soundFilePath));
-            clip.open(inputStream);
-
-            // Start playing the sound
-            clip.start();
-
-            // Wait for the sound to finish
-            while (!clip.isRunning())
-                Thread.sleep(10);
-            while (clip.isRunning())
-                Thread.sleep(10);
-
-            // Clean up resources
-            clip.close();
-            inputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (soundURL == null) {
+            throw new IOException("Sound file not found: sounds/mySound.wav");
         }
+
+        // Use the URL to create an AudioInputStream for playback
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
+        // ... (Continue with playback using an audio player library)
+        // ... (code from previous step)
+        AudioFormat format = audioInputStream.getFormat();
+        DataLine.Info info = new DataLine.Info(Clip.class, format);
+        Clip clip = (Clip) AudioSystem.getLine(info);
+        clip.open(audioInputStream);
+        clip.start(); // Plays the audio
     }
 }
