@@ -1,1 +1,3 @@
-80
+The highest scroes:70
+the score of this game:30
+Top five scores:70 60 30 26 21

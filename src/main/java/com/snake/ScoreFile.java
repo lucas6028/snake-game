@@ -6,13 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 
 public class ScoreFile {
     public static int score = 0;
     public static int highest_score;
-    
+    public static ArrayList<Integer> numbers = new ArrayList<>(5);
     private static final String recordsFileName = "src/main/resources/filename.txt";
     // private InputStream inputStream = ScoreFile.class.getClassLoader().getResourceAsStream(recordsFileName);
 
@@ -26,23 +28,44 @@ public class ScoreFile {
             // BufferedWriter writer = new BufferedWriter(new FileWriter(recordsFileName));
             FileWriter writer = new FileWriter(recordsFileName);
             if (score > highest_score){
-                writer.write("" + score);
+                writer.write("The highest scroes:" + score+ "\n");
                 highest_score = score;
         // Keep the original score
             } else {
-                writer.write("" + highest_score);
+                writer.write("The highest scroes:" + highest_score+ "\n");
             }
+            writer.write("the score of this game:" + score+ "\n");
+            if(score>numbers.get(0)){
+                numbers.set(0, score);
+                Collections.sort(numbers);
+            }
+            writer.write("Top five scores:"+ numbers.get(4)+" "+numbers.get(3)+" "+numbers.get(2)+" "+numbers.get(1)+" "+numbers.get(0));
+            
             writer.close();
         } catch (IOException e){
             e.printStackTrace();
         }
     }
-    public void read_hightes_score() {
+    public void read_highest_score() {
         // If the file already exist, read the highest score
         try{
             File myObj = new File(recordsFileName);
             Scanner sc = new Scanner(myObj);
-            highest_score = sc.nextInt();
+            String highest_score_line = sc.nextLine();
+            String[] highest_score_parts = highest_score_line.split(":");
+                highest_score = Integer.parseInt(highest_score_parts[1].trim());
+
+            String score_line = sc.nextLine();
+            String[] score_parts = score_line.split(":");
+            int score_record = Integer.parseInt(score_parts[1].trim());
+
+            String score_rank_line = sc.nextLine();
+            String[] rank_numbers = score_rank_line.split(":")[1].trim().split("\\s+");
+            for (String num : rank_numbers) {
+                numbers.add(Integer.parseInt(num));
+            }
+            Collections.sort(numbers);
+
             sc.close();
         // If File is not exist, highest score = 0, open new file and save the records
         } catch (FileNotFoundException e){
@@ -62,4 +85,3 @@ public class ScoreFile {
         }
     }
 }
-

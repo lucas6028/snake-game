@@ -169,7 +169,7 @@ public class Snake {
             System.out.println("Eat the fruit");
             fruit.setNewLocation(this, bomb); // set fruit to new location
             fruit.drawFruit(g);
-            ScoreFile.score++;
+            ScoreFile.score += 10;
             eatFruit = true;
         } else {
             eatFruit = false;

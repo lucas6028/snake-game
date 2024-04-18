@@ -79,10 +79,10 @@ public class ContainerPanel extends JPanel implements KeyListener{
         buttonTwo.setPreferredSize(new Dimension(150, 150));
         buttonSingle.setHorizontalTextPosition(JButton.CENTER);
         buttonTwo.setHorizontalTextPosition(JButton.CENTER);
+        // buttonSingle.setBounds(300, 300, 300, 300);
         openingScreen.setBackground(Color.BLACK);
         openingScreen.add(buttonSingle);
         openingScreen.add(buttonTwo);
-        openingScreen.add(new JLabel("Opening Screen"));
     
         buttonSingle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -192,7 +192,6 @@ public class ContainerPanel extends JPanel implements KeyListener{
             }
         };
         gameScreen.setBackground(Color.BLACK);
-        gameScreen.add(new JLabel("Game"));
 
         gameScreen.add(scoreLabel);
     
@@ -205,7 +204,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
         addKeyListener(this);
         setTimer();
     
-        file.read_hightes_score();
+        file.read_highest_score();
     }
 
     // Setting speed
@@ -231,17 +230,19 @@ public class ContainerPanel extends JPanel implements KeyListener{
         g2.drawString("Your Score: ", 680, 100);
         g2.drawString("Leaderboard", 900, 300);
         g2.drawString("----------------", 900, 330);
+        g2.drawString("1.", 900, 360);
+        g2.drawString("2." , 900, 390);
+        g2.drawString("3." , 900, 420);
+        g2.drawString("4." , 900, 450);
+        g2.drawString("5." , 900, 480);
         g2.setColor(Color.RED);
-        g2.drawString("" + ScoreFile.score * 10, 810, 100);
+        g2.drawString("" + ScoreFile.score, 810, 100);
+        g2.drawString("" + ScoreFile.numbers.get(4), 950, 360);
+        g2.drawString("" + ScoreFile.numbers.get(3), 950, 390);
+        g2.drawString("" + ScoreFile.numbers.get(2), 950, 420);
+        g2.drawString("" + ScoreFile.numbers.get(1), 950, 450);
+        g2.drawString("" + ScoreFile.numbers.get(0), 950, 480);
     }
-
-    // public void updateLable() {
-    //     // Set and Update score label
-    //     scoreLabel.setText("Score: " + Integer.toString(ScoreFile.score * 10));
-    //     scoreLabel.setForeground(Color.WHITE);
-    //     scoreLabel.setBounds(rightBorder - 15, topBorder - 80, 200, 30);
-    //     // scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
-    // }
         
     private void reset() {
         ScoreFile.score = 0;
@@ -265,7 +266,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
         int responese = JOptionPane.showOptionDialog(
             this,//1.parent container component
             "Game Over!! Your score is "
-            + (ScoreFile.score * 10)
+            + (ScoreFile.score)
             + ". The highest score was "
             + ScoreFile.highest_score
             + ". Would you like to start over?",//2.Set message to display

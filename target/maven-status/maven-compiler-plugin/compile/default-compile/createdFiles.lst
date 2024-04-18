@@ -1,5 +1,6 @@
 com\snake\Bomb.class
 com\snake\ContainerPanel$2.class
+com\snake\Stone.class
 com\snake\Main$1.class
 com\snake\ImageLoader.class
 com\snake\Main.class
