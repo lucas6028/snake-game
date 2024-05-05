@@ -28,25 +28,8 @@ public class Snake {
     public void drawSnake(Graphics g, boolean isA) {
         // The color of the snake
         for (int i = 0; i < snakeBody.size(); i++) {
-            if (i == 0) {
-                if (isA) {
-                    g.setColor(Color.GREEN);
-                    // g.drawRect(snakeX, snakeY, Main.CELL_SIZE, Main.CELL_SIZE);
-                }
-                else {
-                    g.setColor(Color.RED);
-                }
-            }
-            else {
-                if (isA) {
-                    g.setColor(Color.ORANGE);
-                }
-                else {
-                    g.setColor(Color.BLUE);
-                }
-            }
-
-
+            
+            
             // Handle the border
             Node n = snakeBody.get(i);
             if (ContainerPanel.enableCrossBorder) {
@@ -66,8 +49,20 @@ public class Snake {
                 }
             }
 
-            g.fillOval(n.x, n.y, ContainerPanel.CELL_SIZE, ContainerPanel.CELL_SIZE);
-            
+            if (i == 0) {
+                if (isA) 
+                    g.setColor(Color.GREEN);
+                else 
+                    g.setColor(Color.RED);
+                g.drawOval(n.x, n.y, ContainerPanel.CELL_SIZE, ContainerPanel.CELL_SIZE);
+            }
+            else {
+                if (isA) 
+                    g.setColor(Color.ORANGE);
+                else
+                    g.setColor(Color.BLUE);
+                g.fillOval(n.x, n.y, ContainerPanel.CELL_SIZE, ContainerPanel.CELL_SIZE);
+            }
         }
     }
 
@@ -89,6 +84,23 @@ public class Snake {
         }
         return false;
     }
+
+    public boolean touchOtherSnakes(Snake snakeB) {
+        // snakeA's head
+        // snakeB's body
+        int headX = this.getSnakeBody().get(0).x;
+        int headY = this.getSnakeBody().get(0).y;
+
+        for (int i = 1; i < snakeB.getSnakeBody().size(); ++i) {
+            if (headX == snakeB.getSnakeBody().get(i).x && 
+                headY == snakeB.getSnakeBody().get(i).y) {
+                    System.out.println("Snake head touching another snake's body!");
+                    return true;
+                }
+        }
+        return false;
+    }
+
 
     public void moveSnake(int CELL_SIZE) {
         // Move the snake by Keyboard
@@ -126,19 +138,19 @@ public class Snake {
         if (byArrowKey) {
             if (e.getKeyCode() == 37 && !direction.equals("Right")) {
                 direction = "Left";
-                System.out.println("Left");
+                // System.out.println("Left");
             }
             else if (e.getKeyCode() == 39 && !direction.equals("Left")) {
                 direction = "Right";
-                System.out.println("Right");
+                // System.out.println("Right");
             }
             else if (e.getKeyCode() == 38 && !direction.equals("Down")) {
                 direction = "Up";
-                System.out.println("Up");
+                // System.out.println("Up");
             }
             else if (e.getKeyCode() == 40 && !direction.equals("Up")) {
                 direction = "Down";
-                System.out.println("Down");
+                // System.out.println("Down");
             }
             // allowKeyPress = false;
         }
@@ -157,7 +169,7 @@ public class Snake {
             }
         }
     }
-    public void checkEatFruit(Fruit fruit, Bomb bomb, Graphics g) {
+    public boolean checkEatFruit(Fruit fruit, Bomb bomb, Graphics g) {
         int snakeHeadX = this.getSnakeBody().get(0).x;
         int snakeHeadY = this.getSnakeBody().get(0).y;
         int fruitX = fruit.getX();
@@ -170,8 +182,11 @@ public class Snake {
             fruit.drawFruit(g);
             ScoreFile.score += 10;
             eatFruit = true;
+            return true;
+            // System.out.println("speed: " + ContainerPanel.speed);
         } else {
             eatFruit = false;
+            return false;
         }
     }
 }

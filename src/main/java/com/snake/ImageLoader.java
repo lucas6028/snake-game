@@ -6,8 +6,8 @@ public class ImageLoader {
     public static final String background = "/images/background/navy_blue.jpg";
     public static final String singleButtonImage = "/images/buttons/onePlayer.jpg";
     public static final String twoButtonImage = "/images/buttons/twoPlayer.png";
-    public static final String fruitImage = "/images/fruits/fruit.png";
-    public static final String bombImage = "";
+    public static final String fruitImage = "/images/fruits/apple.png";
+    public static final String bombImage = "/images/bombs/bomb.png";
     public static final String stoneImage = "";
 
     public static ImageIcon loadImageIconFromResource(String imagePath) {

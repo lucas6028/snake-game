@@ -1,19 +1,9 @@
 package com.snake;
 
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
-import java.util.Timer;
-import java.util.TimerTask;
-
+import java.util.*;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -37,6 +27,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
 
     // Setting speed variables
     private Timer t;
+    private Timer bt;
     // private Timer timerUI;
     private int speed = 50;
     private int level = 1;
@@ -47,6 +38,9 @@ public class ContainerPanel extends JPanel implements KeyListener{
     public static boolean enableCrossBorder = true;
     public static boolean enableBomb = false;
     public static boolean enableWall = true;
+    public boolean enableChangeSpeed = false;
+    public boolean shootBulletA = false;
+    public boolean shootBulletB = false;
     
     private ImageIcon backgroundImage;
     
@@ -117,7 +111,9 @@ public class ContainerPanel extends JPanel implements KeyListener{
     
                 // Snake A
                 snakeA.drawSnake(g, true);
-                snakeA.checkEatFruit(fruit, bomb, g);
+                if (snakeA.checkEatFruit(fruit, bomb, g)) {
+                        if (enableChangeSpeed) changeSpeed(speed - 3);
+                }  
                 headA = snakeA.getSnakeBody().get(0);
                 if (bomb.touchBomb(snakeA)) {
                     allowKeyPress = false;
@@ -128,19 +124,15 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 for(int i = 3 ; i < snakeA.getSnakeBody().size();i++){
                     if (snakeA.getSnakeBody().get(i).x == headA.x && snakeA.getSnakeBody().get(i).y == headA.y){
                         allowKeyPress = false; //game over keyborad can't use
-                        
                         t.cancel(); //game over timer t stop
                         t.purge();
-                        
                         resetUI();
                     }
                 }
                 if (snakeA.isCrossBorder() == true && !enableCrossBorder) {
-                    allowKeyPress = false; //game over keyborad can't use
-                    
+                    allowKeyPress = false; //game over keyborad can't use 
                     t.cancel(); //game over timer t stop
                     t.purge();
-                    
                     resetUI();
                 }
                 snakeA.moveSnake(CELL_SIZE);
@@ -149,7 +141,10 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 if (enableB) {
                     // snakeB = new Snake(100);
                     snakeB.drawSnake(g, false);
-                    snakeB.checkEatFruit(fruit, bomb, g);
+                    if (snakeB.checkEatFruit(fruit, bomb, g)) {
+                        if (enableChangeSpeed) changeSpeed(speed - 3);
+                    }  
+                    
                     headB = snakeB.getSnakeBody().get(0);
                     if (bomb.touchBomb(snakeB)) {
                         allowKeyPress = false;
@@ -160,20 +155,55 @@ public class ContainerPanel extends JPanel implements KeyListener{
                     for(int i = 3 ; i < snakeB.getSnakeBody().size();i++) {
                         if (snakeB.getSnakeBody().get(i).x == headB.x && snakeB.getSnakeBody().get(i).y == headB.y){
                             allowKeyPress = false; //game over keyborad can't use
-                
                             t.cancel(); //game over timer t stop
                             t.purge();
-            
                             resetUI();
                         }
+                        // else if (snakeB.getSnakeBody().get(i).x == headA.x && snakeB.getSnakeBody().get(i).y == headA.y) {
+                        //     allowKeyPress = false;
+                        //     t.cancel();
+                        //     t.purge();
+                        //     resetUI();
+                        // }
                     }
                     if (snakeB.isCrossBorder() == true && !enableCrossBorder) {
                         allowKeyPress = false; // game over keyborad can't use
-                        
                         t.cancel(); //game over timer t stop
                         t.purge();
-                        
                         resetUI();
+                    }
+                    
+                    boolean collision = checkCollision(snakeA, snakeB);
+                    if (collision) {
+                        System.out.println("Collision detected!");
+                    }
+
+                    for (int i = 0; i < snakeA.getSnakeBody().size(); ++i) {
+                        for (int j = 0; j < snakeB.getSnakeBody().size(); ++j) {
+                            if (snakeA.getSnakeBody().get(i).x == snakeB.getSnakeBody().get(j).x &&
+                                snakeA.getSnakeBody().get(i).y == snakeB.getSnakeBody().get(j).y) {
+                                    System.out.println("touch");
+                                    allowKeyPress = false;
+                                    t.cancel();
+                                    t.purge();
+                                    resetUI();
+                                }
+                        }
+                    }
+
+                    if (shootBulletA) {
+                        Bullet bullet = new Bullet();
+                        bullet.drawBullet(g2, headA, CELL_SIZE);
+                        bullet.moveBullet(CELL_SIZE, snakeA.direction);
+                        bullet.setBulletTimer();
+                        shootBulletA = false;
+                    }
+                    if (shootBulletB) {
+                        Bullet bullet = new Bullet();
+                        bullet.drawBullet(g2, headB, CELL_SIZE);
+                        bullet.moveBullet(CELL_SIZE, snakeB.direction);
+                        bullet.setBulletTimer();
+                        shootBulletB = false;
                     }
                     snakeB.moveSnake(CELL_SIZE);
                 }
@@ -213,13 +243,28 @@ public class ContainerPanel extends JPanel implements KeyListener{
         }, 0, speed);
     }
 
+    private void changeSpeed(int newSpeed) {
+        speed = newSpeed;
+        System.out.println("Speed: " + speed);
+        t.cancel();
+        setTimer();
+    }
+
     public void switchScreen(String screenName) {
         cardLayout.show(this, screenName);
     }
 
     public void drawStatusBar(Graphics2D g2) {
-        g2.setColor(Color.WHITE);
         g2.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+        if (enableB) {
+            g2.setColor(Color.RED);
+            g2.fillRect(250, 30, CELL_SIZE, CELL_SIZE);
+            g2.setColor(Color.YELLOW);
+            g2.drawString("Player 1", 300, 100);
+            g2.drawLine(250, 30, CELL_SIZE * 10 + 250, 30);
+            return;
+        }
+        g2.setColor(Color.WHITE);
         g2.drawString("Time: ", 210, 100);
         // g2.drawString("Level: ", 460, 100);
         g2.drawString("Your Score: ", 680, 100);
@@ -258,13 +303,24 @@ public class ContainerPanel extends JPanel implements KeyListener{
         if (score < 99) {
             level = 1;
         }
-        else if (score > 99 && score < 199) {
+        if (score > 99) {
             level = 2;
             if (!enableBomb) {
                 bomb.setNewLocation(snakeA, fruit);
                 bomb.drawFruit(g);
             }
             enableBomb = true;
+        }
+        if (score > 199) {
+            level = 3;
+            enableChangeSpeed = true;
+        }
+        if (score > 299) {
+            level = 4;
+            enableCrossBorder = false;
+        }
+        if (score > 399) {
+            level = 5;
         }
     }
 
@@ -280,18 +336,54 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 case 1:
                     g2.setColor(Color.BLUE);
                     break;
-                    case 2:
+                case 2:
                     g2.setColor(Color.GREEN);
                     break;
-                    default:
+                case 3:
+                    g2.setColor(Color.MAGENTA);
+                    break;
+                case 4:
+                    g2.setColor(Color.DARK_GRAY);
+                    break;
+                case 5:
+                    g2.setColor(Color.BLACK);
+                    break;
+                default:
                     g2.setColor(Color.BLUE);
                 }
             g2.draw(rect);
         }
     }
+
+    public static boolean checkCollision(Snake snakeA, Snake snakeB) {
+        // Check for head collision
+        Node headA = snakeA.getSnakeBody().get(0);
+        Node headB = snakeB.getSnakeBody().get(0);
+        if (headA.x == headB.x && headA.y == headB.y) {
+            return true; // Collision detected at the heads
+        }
+
+        // Check for body collision
+        for (int i = 1; i < snakeA.getSnakeBody().size(); i++) {
+            Node nodeA = snakeA.getSnakeBody().get(i);
+            for (int j = 0; j < snakeB.getSnakeBody().size(); j++) {
+                Node nodeB = snakeB.getSnakeBody().get(j);
+                if (nodeA.x == nodeB.x && nodeA.y == nodeB.y) {
+                    return true; // Collision detected at the bodies
+                }
+            }
+        }
+
+        // No collision detected
+        return false;
+    }
         
     private void reset() {
         ScoreFile.score = 0;
+        enableCrossBorder = true;
+        enableBomb = false;
+        enableChangeSpeed = false;
+        speed = 50;
         if (snakeA != null) {
             snakeA.getSnakeBody().clear();
         }
@@ -299,9 +391,9 @@ public class ContainerPanel extends JPanel implements KeyListener{
             snakeB.getSnakeBody().clear();
         }
         allowKeyPress = true;
-        snakeA = new Snake(0);
+        snakeA = new Snake(200);
         if (enableB) {
-            snakeB = new Snake(100);
+            snakeB = new Snake(300);
         }
         setTimer();
         fruit.setNewLocation(snakeA, bomb);
