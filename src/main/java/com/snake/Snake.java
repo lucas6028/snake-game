@@ -5,9 +5,12 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import javax.swing.CellEditor;
+
 public class Snake {
     public int snakeX;
     public int snakeY;
+    private int CELL_SIZE = ContainerPanel.CELL_SIZE;
     public String direction = "Right";
     public Node newHead; 
     private ArrayList<Node> snakeBody;
@@ -51,16 +54,16 @@ public class Snake {
 
             if (i == 0) {
                 if (isA) 
-                    g.setColor(Color.GREEN);
-                else 
                     g.setColor(Color.RED);
+                else 
+                    g.setColor(Color.GREEN);
                 g.drawOval(n.x, n.y, ContainerPanel.CELL_SIZE, ContainerPanel.CELL_SIZE);
             }
             else {
                 if (isA) 
-                    g.setColor(Color.ORANGE);
-                else
                     g.setColor(Color.BLUE);
+                else
+                    g.setColor(Color.ORANGE);
                 g.fillOval(n.x, n.y, ContainerPanel.CELL_SIZE, ContainerPanel.CELL_SIZE);
             }
         }
@@ -175,8 +178,8 @@ public class Snake {
         int fruitX = fruit.getX();
         int fruitY = fruit.getY();
         
-        if (Math.abs(snakeHeadX - fruitX) <= (ContainerPanel.CELL_SIZE / 2) && 
-            Math.abs(snakeHeadY - fruitY) <= (ContainerPanel.CELL_SIZE / 2)) {
+        if (Math.abs(snakeHeadX - (fruitX + CELL_SIZE)) <= CELL_SIZE && 
+            Math.abs(snakeHeadY - (fruitY + CELL_SIZE)) <= CELL_SIZE) {
             System.out.println("Eat the fruit");
             fruit.setNewLocation(this, bomb); // set fruit to new location
             fruit.drawFruit(g);

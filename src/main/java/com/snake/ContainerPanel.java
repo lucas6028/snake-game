@@ -42,8 +42,6 @@ public class ContainerPanel extends JPanel implements KeyListener{
     public boolean shootBulletA = false;
     public boolean shootBulletB = false;
     
-    private ImageIcon backgroundImage;
-    
     private Node headA;
     private Node headB;
     public static Fruit fruit = new Fruit();
@@ -54,7 +52,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
 
     public ContainerPanel () {
         // Load the background image
-        backgroundImage = ImageLoader.loadImageIconFromResource(ImageLoader.background);
+        ImageIcon backgroundImage = ImageLoader.loadImageIconFromResource(ImageLoader.background);
     
         // Set JPanel properties
         // setPreferredSize(new Dimension(backgroundImage.getIconWidth(), backgroundImage.getIconHeight()));
@@ -112,7 +110,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 // Snake A
                 snakeA.drawSnake(g, true);
                 if (snakeA.checkEatFruit(fruit, bomb, g)) {
-                        if (enableChangeSpeed) changeSpeed(speed - 3);
+                        if (enableChangeSpeed) changeSpeed();
                 }  
                 headA = snakeA.getSnakeBody().get(0);
                 if (bomb.touchBomb(snakeA)) {
@@ -142,7 +140,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
                     // snakeB = new Snake(100);
                     snakeB.drawSnake(g, false);
                     if (snakeB.checkEatFruit(fruit, bomb, g)) {
-                        if (enableChangeSpeed) changeSpeed(speed - 3);
+                        if (enableChangeSpeed) changeSpeed();
                     }  
                     
                     headB = snakeB.getSnakeBody().get(0);
@@ -243,8 +241,8 @@ public class ContainerPanel extends JPanel implements KeyListener{
         }, 0, speed);
     }
 
-    private void changeSpeed(int newSpeed) {
-        speed = newSpeed;
+    private void changeSpeed() {
+        speed = speed - 2;
         System.out.println("Speed: " + speed);
         t.cancel();
         setTimer();
@@ -359,9 +357,12 @@ public class ContainerPanel extends JPanel implements KeyListener{
         // Check for head collision
         Node headA = snakeA.getSnakeBody().get(0);
         Node headB = snakeB.getSnakeBody().get(0);
-        if (headA.x == headB.x && headA.y == headB.y) {
-            return true; // Collision detected at the heads
-        }
+        // if (headA.x == headB.x && headA.y == headB.y) {
+        //     return true; // Collision detected at the heads
+        // }
+        if (Math.abs(headA.x - headB.x) <= (ContainerPanel.CELL_SIZE / 2) && 
+            Math.abs(headA.y - headB.y) <= (ContainerPanel.CELL_SIZE / 2)) 
+            return true;
 
         // Check for body collision
         for (int i = 1; i < snakeA.getSnakeBody().size(); i++) {
@@ -371,6 +372,9 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 if (nodeA.x == nodeB.x && nodeA.y == nodeB.y) {
                     return true; // Collision detected at the bodies
                 }
+                if (Math.abs(nodeA.x - nodeB.x) <= (ContainerPanel.CELL_SIZE / 2) && 
+                    Math.abs(nodeA.y - nodeB.y) <= (ContainerPanel.CELL_SIZE / 2))
+                    return true;
             }
         }
 
