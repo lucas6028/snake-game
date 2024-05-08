@@ -4,16 +4,19 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Fruit {
     private int x, y;
     public ImageIcon img;
+    private int randomFruit = -1;
     
     public Fruit() {
-        img = ImageLoader.loadImageIconFromResource(ImageLoader.fruitImage);    
+        randomFrutits();
+        // img = ImageLoader.loadImageIconFromResource(ImageLoader.fruitImage);    
         // img = null;
-        this.x = (int) (Math.floor(Math.random() * ContainerPanel.column) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
-        this.y = (int) (Math.floor(Math.random() * ContainerPanel.row) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder); 
+        this.x = (int) (Math.floor(Math.random() * (ContainerPanel.column - 1)) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
+        this.y = (int) (Math.floor(Math.random() * (ContainerPanel.row - 1)) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder); 
     }
     
     public int getX() {
@@ -26,6 +29,7 @@ public class Fruit {
 
     public void drawFruit(Graphics g) {
         if (img != null) {
+            // randomFrutits();
             img.paintIcon(null, g, this.x, this.y);
         }
         else {
@@ -47,6 +51,7 @@ public class Fruit {
 
         this.x = new_x;
         this.y = new_y; 
+        randomFrutits();
     }
 
     public boolean check_overlap(int x, int y, Snake s, Bomb bomb) {
@@ -63,5 +68,25 @@ public class Fruit {
         }
         return false;
     } 
+
+    private void randomFrutits() {
+        Random rand = new Random();
+        int tmp = rand.nextInt(3);
+        while (randomFruit == tmp) tmp = rand.nextInt(3);
+        randomFruit = tmp;
+        
+        switch (randomFruit) {
+            case 0:
+                img = ImageLoader.loadImageIconFromResource(ImageLoader.appleImage);
+                break;
+            case 1:
+                img = ImageLoader.loadImageIconFromResource(ImageLoader.orangeImage);
+                break;
+            case 2:
+                img = ImageLoader.loadImageIconFromResource(ImageLoader.chickenLegImage);
+                break;
+        }
+
+    }
 }
 

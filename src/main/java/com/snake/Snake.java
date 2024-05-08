@@ -172,6 +172,7 @@ public class Snake {
             }
         }
     }
+
     public boolean checkEatFruit(Fruit fruit, Bomb bomb, Graphics g) {
         int snakeHeadX = this.getSnakeBody().get(0).x;
         int snakeHeadY = this.getSnakeBody().get(0).y;
@@ -191,5 +192,14 @@ public class Snake {
             eatFruit = false;
             return false;
         }
+    }
+
+    public boolean checkEatItSelf(Node headA) {
+        for(int i = 3 ; i < this.getSnakeBody().size();i++){
+            if (this.getSnakeBody().get(i).x == headA.x && this.getSnakeBody().get(i).y == headA.y){
+                return true;
+            }
+        }
+        return false;
     }
 }
