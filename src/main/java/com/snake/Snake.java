@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import javax.swing.CellEditor;
-
 public class Snake {
     public int snakeX;
     public int snakeY;
@@ -30,9 +28,7 @@ public class Snake {
 
     public void drawSnake(Graphics g, boolean isA) {
         // The color of the snake
-        for (int i = 0; i < snakeBody.size(); i++) {
-            
-            
+        for (int i = 0; i < snakeBody.size(); i++) { 
             // Handle the border
             Node n = snakeBody.get(i);
             if (ContainerPanel.enableCrossBorder) {
@@ -104,7 +100,6 @@ public class Snake {
         return false;
     }
 
-
     public void moveSnake(int CELL_SIZE) {
         // Move the snake by Keyboard
         snakeX = this.getSnakeBody().get(0).x;
@@ -126,7 +121,6 @@ public class Snake {
         newHead = new Node(snakeX, snakeY);
 
         // Snake move
-        // Remove the tail and put it in head
         if (!eatFruit) {
             this.getSnakeBody().remove(getSnakeBody().size() - 1);
             eatFruit = false;
@@ -141,19 +135,15 @@ public class Snake {
         if (byArrowKey) {
             if (e.getKeyCode() == 37 && !direction.equals("Right")) {
                 direction = "Left";
-                // System.out.println("Left");
             }
             else if (e.getKeyCode() == 39 && !direction.equals("Left")) {
                 direction = "Right";
-                // System.out.println("Right");
             }
             else if (e.getKeyCode() == 38 && !direction.equals("Down")) {
                 direction = "Up";
-                // System.out.println("Up");
             }
             else if (e.getKeyCode() == 40 && !direction.equals("Up")) {
                 direction = "Down";
-                // System.out.println("Down");
             }
             // allowKeyPress = false;
         }
@@ -173,6 +163,21 @@ public class Snake {
         }
     }
 
+    public boolean checkShoot(KeyEvent e, boolean allowKeyPress, boolean byArrowKey) {
+        if (!allowKeyPress) {
+            return false;
+        }
+        if (byArrowKey) {
+            if (e.getKeyCode() == 88)
+                return true;
+        }
+        else {
+            if (e.getKeyCode() == 10)
+                return true;
+        }
+        return false;
+    }
+
     public boolean checkEatFruit(Fruit fruit, Bomb bomb, Graphics g) {
         int snakeHeadX = this.getSnakeBody().get(0).x;
         int snakeHeadY = this.getSnakeBody().get(0).y;
@@ -187,7 +192,6 @@ public class Snake {
             ScoreFile.score += 10;
             eatFruit = true;
             return true;
-            // System.out.println("speed: " + ContainerPanel.speed);
         } else {
             eatFruit = false;
             return false;

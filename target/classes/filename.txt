@@ -1,3 +1,3 @@
-The highest scores:170
-the score of this game:170
-Top five scores:170 150 130 110 100
+The highest scores:310
+the score of this game:10
+Top five scores:310 190 190 180 170

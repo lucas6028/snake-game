@@ -1,6 +1,5 @@
 package com.snake;
 
-import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -9,13 +8,12 @@ public class Bomb extends Fruit {
     private int x, y;
     private int CELL_SIZE = ContainerPanel.CELL_SIZE;
     
-    public Bomb() {
+    public Bomb(int column, int row, int CELL_SIZE, int leftBorder, int topBorder) {
         img = ImageLoader.loadImageIconFromResource(ImageLoader.bombImage);    
         // img = null;
-        this.x = (int) (Math.floor(Math.random() * (ContainerPanel.column - 1)) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
-        this.y = (int) (Math.floor(Math.random() * (ContainerPanel.row - 1)) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder); 
+        this.x = (int) (Math.floor(Math.random() * (column - 1)) * CELL_SIZE + leftBorder);
+        this.y = (int) (Math.floor(Math.random() * (row - 1)) * CELL_SIZE + topBorder); 
     }
-
 
     public boolean touchBomb(Snake s) {
         ArrayList<Node> snake_body = s.getSnakeBody();
@@ -41,15 +39,14 @@ public class Bomb extends Fruit {
         }
     }
     
-    
-    public void setNewLocation(Snake s, Fruit fruit) {
-        int new_x = (int) (Math.floor(Math.random() * (ContainerPanel.column - 1)) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
-        int new_y = (int) (Math.floor(Math.random() * (ContainerPanel.row - 1)) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder);
+    public void setNewLocation(Snake s, Fruit fruit, int column, int row, int leftBorder, int topBorder) {
+        int new_x = (int) (Math.floor(Math.random() * (column - 1)) * CELL_SIZE + leftBorder);
+        int new_y = (int) (Math.floor(Math.random() * (row - 1)) * CELL_SIZE + topBorder);
         boolean overlapping = check_overlap(new_x, new_y, s, fruit);
 
         while (overlapping) { 
-            new_x = (int) (Math.floor(Math.random() * (ContainerPanel.column - 1)) * ContainerPanel.CELL_SIZE + ContainerPanel.leftBorder);
-            new_y = (int) (Math.floor(Math.random() * (ContainerPanel.row - 1)) * ContainerPanel.CELL_SIZE + ContainerPanel.topBorder);
+            new_x = (int) (Math.floor(Math.random() * (column - 1)) * CELL_SIZE + leftBorder);
+            new_y = (int) (Math.floor(Math.random() * (row - 1)) * CELL_SIZE + topBorder);
             overlapping = check_overlap(new_x, new_y, s, fruit);
         }
 

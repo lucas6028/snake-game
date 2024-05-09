@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 public class ContainerPanel extends JPanel implements KeyListener{
     private CardLayout cardLayout;
-    private JPanel openingScreen = new JPanel();
+    // private JPanel openingScreen = new JPanel();
 
     // Size of frame variables
     public static final int CELL_SIZE = 15;
@@ -27,8 +27,6 @@ public class ContainerPanel extends JPanel implements KeyListener{
 
     // Setting speed variables
     private Timer t;
-    // private Timer bt;
-    // private Timer timerUI;
     private int speed = 50;
     private int level = 1;
     public static JLabel scoreLabel = new JLabel();
@@ -44,8 +42,9 @@ public class ContainerPanel extends JPanel implements KeyListener{
     
     private Node headA;
     private Node headB;
+    public static Draw draw;
     public static Fruit fruit = new Fruit();
-    public static Bomb bomb = new Bomb();
+    public static Bomb bomb = new Bomb(column, row, CELL_SIZE, leftBorder, topBorder);
     public static Snake snakeA = new Snake(200);
     public static Snake snakeB = new Snake(300);
     public static ScoreFile file = new ScoreFile();
@@ -55,6 +54,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
     public ContainerPanel () {
         // Load the background image
         ImageIcon backgroundImage = ImageLoader.loadImageIconFromResource(ImageLoader.background);
+        draw = new Draw(level);
     
         // Set JPanel properties
         // setPreferredSize(new Dimension(backgroundImage.getIconWidth(), backgroundImage.getIconHeight()));
@@ -63,29 +63,15 @@ public class ContainerPanel extends JPanel implements KeyListener{
         cardLayout = new CardLayout();
         this.setLayout(cardLayout);
     
-        // openingScreen.setLayout(new BoxLayout(openingScreen, BoxLayout.Y_AXIS));
-        JButton buttonSingle = new JButton();
-        JButton buttonTwo = new JButton();
-        ImageIcon singleImage = ImageLoader.loadImageIconFromResource(ImageLoader.singleButtonImage);
-        ImageIcon twoImage = ImageLoader.loadImageIconFromResource(ImageLoader.twoButtonImage);
-        buttonSingle.setIcon(singleImage);
-        buttonSingle.setPreferredSize(new Dimension(150, 150));
-        buttonTwo.setIcon(twoImage);
-        buttonTwo.setPreferredSize(new Dimension(150, 150));
-        buttonSingle.setHorizontalTextPosition(JButton.CENTER);
-        buttonTwo.setHorizontalTextPosition(JButton.CENTER);
-        // buttonSingle.setBounds(300, 300, 300, 300);
-        openingScreen.setBackground(Color.BLACK);
-        openingScreen.add(buttonSingle);
-        openingScreen.add(buttonTwo);
-    
-        buttonSingle.addActionListener(new ActionListener() {
+        // openingScreen.setLayout(new BoxLayout(openingScreen, BoxLayout.Y_AXIS));    
+        OpeningScreen openingScreen = new OpeningScreen();
+        openingScreen.buttonSingle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 enableB = false;
                 switchScreen("Game");
             }
         });
-        buttonTwo.addActionListener(new ActionListener() {
+        openingScreen.buttonTwo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 enableB = true;
                 switchScreen("Game");
@@ -102,7 +88,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g;
     
-                drawBorder(g2);
+                draw.drawBorder(g2);
 
                 if (!enableBomb) {
                     bomb.setX(-100);
@@ -113,7 +99,8 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 snakeA.drawSnake(g, true);
                 headA = snakeA.getSnakeBody().get(0);
                 if (snakeA.checkEatFruit(fruit, bomb, g)) {
-                    if (enableChangeSpeed) changeSpeed();
+                    if (enableChangeSpeed)
+                        changeSpeed();
                 }  
                 if (bomb.touchBomb(snakeA)) {
                     resetUI();
@@ -150,43 +137,46 @@ public class ContainerPanel extends JPanel implements KeyListener{
                         System.out.println("Collision detected!");
                     }
 
-                    // for (int i = 0; i < snakeA.getSnakeBody().size(); ++i) {
-                    //     for (int j = 0; j < snakeB.getSnakeBody().size(); ++j) {
-                    //         if (snakeA.getSnakeBody().get(i).x == snakeB.getSnakeBody().get(j).x &&
-                    //             snakeA.getSnakeBody().get(i).y == snakeB.getSnakeBody().get(j).y) {
-                    //                 System.out.println("touch");
-                    //                 resetUI();
-                    //             }
-                    //     }
-                    // }
-
                     // add the bullet                        
                     if (shootBulletA) {
-                        bulletA.add(new Bullet(CELL_SIZE, snakeA.direction));
-                        // bullet.drawBullet(g2, headA, CELL_SIZE);
-                        // bullet.moveBullet(CELL_SIZE, snakeA.direction);
-                        // bullet.setBulletTimer();
+                        bulletA.add(new Bullet(CELL_SIZE, snakeA.direction, headA));
                         shootBulletA = false;
                     }
                     if (shootBulletB) {
-                        bulletB.add(new Bullet(CELL_SIZE, snakeB.direction));
-                        // bullet.drawBullet(g2, headB, CELL_SIZE);
-                        // bullet.moveBullet(CELL_SIZE, snakeB.direction);
-                        // bullet.setBulletTimer();
+                        bulletB.add(new Bullet(CELL_SIZE, snakeB.direction, headB));
                         shootBulletB = false;
                     }
-                    // update bullets
+                    
+                    // update bullet
+                    for (int i = 0; i < bulletA.size(); ++i) {
+                        bulletA.get(i).update(CELL_SIZE);
+                        // check border
+                        if (bulletA.get(i).checkBorder(leftBorder, rightBorder, topBorder, bottomBorder)) {
+                            bulletA.remove(0);
+                        }
+                        else {
+                            bulletA.get(i).drawBullet(g2, CELL_SIZE);
+                        }
+                    }
+                    for (int i = 0; i < bulletB.size(); ++i) {
+                        bulletB.get(i).update(CELL_SIZE);
+                        // check border
+                        if (bulletB.get(i).checkBorder(leftBorder, rightBorder, topBorder, bottomBorder)) {
+                            bulletB.remove(i);
+                        }
+                        bulletB.get(i).drawBullet(g2, CELL_SIZE);
+                    }
                     
 
                     snakeB.moveSnake(CELL_SIZE);
                 }
                 fruit.drawFruit(g);
-                drawStatusBar(g2);
+                draw.drawStatusBar(g2);
                 if (enableBomb) {
                     bomb.drawFruit(g);
                 }
 
-                changeLevel(g);
+                draw.changeLevel(g2, enableBomb, enableChangeSpeed, enableCrossBorder, bomb, snakeA, fruit);
             }
         };
         gameScreen.setBackground(Color.BLACK);
@@ -201,6 +191,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
         setFocusable(true);
         addKeyListener(this);
         setTimer();
+        draw.setCountDownTimer();
     
         file.read_highest_score();
     }
@@ -215,6 +206,44 @@ public class ContainerPanel extends JPanel implements KeyListener{
             }
         }, 0, speed);
     }
+    // // Setting speed
+    // private void setTimer() {
+    //     t = new Timer();
+    //     t.scheduleAtFixedRate(new TimerTask() {
+    //         long lastUpdateTime = System.currentTimeMillis();
+            
+    //         @Override
+    //         public void run() {
+    //             long currentTime = System.currentTimeMillis();
+    //             long elapsedTime = currentTime - lastUpdateTime;
+                
+    //             // Update snake if enough time has passed
+    //             if (elapsedTime > speed) {
+    //                 snakeA.moveSnake(CELL_SIZE);
+    //                 if (enableB) 
+    //                     snakeB.moveSnake(CELL_SIZE);
+    //                 lastUpdateTime = currentTime;
+    //             }
+                
+    //             // // update bullet
+    //             // for (Bullet bullet : bulletA) {
+    //             //     // check border
+    //             //     if (bullet.checkBorder(leftBorder, rightBorder, topBorder, bottomBorder)) {
+
+    //             //     }
+    //             // }
+    //             // for (Bullet bullet : bulletB) {
+    //             //     // check border
+    //             //     if (bullet.checkBorder(leftBorder, rightBorder, topBorder, bottomBorder)) {
+
+    //             //     }
+    //             // }  
+
+    //             repaint();
+    //         }
+    //     }, 0, speed);
+    // }
+
 
     private void changeSpeed() {
         speed = speed - 2;
@@ -227,131 +256,48 @@ public class ContainerPanel extends JPanel implements KeyListener{
         cardLayout.show(this, screenName);
     }
 
-    public void drawStatusBar(Graphics2D g2) {
-        g2.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
-        if (enableB) {
-            g2.setColor(Color.RED);
-            g2.fillRect(250, 30, CELL_SIZE, CELL_SIZE);
-            g2.setColor(Color.YELLOW);
-            g2.drawString("Player 1", 300, 100);
-            g2.drawLine(250, 30, CELL_SIZE * 10 + 250, 30);
-            return;
-        }
-        g2.setColor(Color.WHITE);
-        g2.drawString("Time: ", 210, 100);
-        // g2.drawString("Level: ", 460, 100);
-        g2.drawString("Your Score: ", 680, 100);
-        
-        // Leaderboard
-        g2.drawString("Leaderboard", 900, 300);
-        g2.drawString("---------------", 870, 330);
-        g2.drawString("1.", 900, 360);
-        g2.drawString("2." , 900, 390);
-        g2.drawString("3." , 900, 420);
-        g2.drawString("4." , 900, 450);
-        g2.drawString("5." , 900, 480);
-        g2.setColor(Color.RED);
-        g2.drawString("" + ScoreFile.score, 810, 100);
-        g2.drawString("" + ScoreFile.numbers.get(4), 950, 360);
-        g2.drawString("" + ScoreFile.numbers.get(3), 950, 390);
-        g2.drawString("" + ScoreFile.numbers.get(2), 950, 420);
-        g2.drawString("" + ScoreFile.numbers.get(1), 950, 450);
-        g2.drawString("" + ScoreFile.numbers.get(0), 950, 480);
-
-        // Level
-        int levelX = 390 + (30 * level);
-        g2.setColor(Color.GRAY);
-        g2.drawString("1", 420, 50);
-        g2.drawString("2", 450, 50);
-        g2.drawString("3", 480, 50);
-        g2.drawString("4", 510, 50);
-        g2.drawString("5", 540, 50);
-
-        g2.setColor(Color.YELLOW);
-        g2.drawString("" + level, levelX, 50);
-    }
-
-    public void changeLevel(Graphics g) {
-        int score = ScoreFile.score;
-        if (score < 99) {
-            level = 1;
-        }
-        if (score > 99) {
-            level = 2;
-            if (!enableBomb) {
-                bomb.setNewLocation(snakeA, fruit);
-                bomb.drawFruit(g);
-            }
-            enableBomb = true;
-        }
-        if (score > 199) {
-            level = 3;
-            enableChangeSpeed = true;
-        }
-        if (score > 299) {
-            level = 4;
-            enableCrossBorder = false;
-        }
-        if (score > 399) {
-            level = 5;
-        }
-    }
-
-    public void drawBorder(Graphics2D g2) {
-        for (int i = 0; i < 17; i++) {
-            // Adjust the position of each rectangle
-            double x = 227.0 - i * 2; // Shift x-coordinate by 2 units per iteration
-            double y = 127.0 + i * 2; // Shift y-coordinate downwards by 2 units per iteration
-
-            Rectangle2D.Double rect = new Rectangle2D.Double(x, y, 624, 480);
-
-            switch(level) {
-                case 1:
-                    g2.setColor(Color.BLUE);
-                    break;
-                case 2:
-                    g2.setColor(Color.GREEN);
-                    break;
-                case 3:
-                    g2.setColor(Color.MAGENTA);
-                    break;
-                case 4:
-                    g2.setColor(Color.DARK_GRAY);
-                    break;
-                case 5:
-                    g2.setColor(Color.BLACK);
-                    break;
-                default:
-                    g2.setColor(Color.BLUE);
-                }
-            g2.draw(rect);
-        }
-    }
-
     public static boolean checkCollision(Snake snakeA, Snake snakeB) {
         // Check for head collision
         Node headA = snakeA.getSnakeBody().get(0);
         Node headB = snakeB.getSnakeBody().get(0);
-        // if (headA.x == headB.x && headA.y == headB.y) {
-        //     return true; // Collision detected at the heads
-        // }
-        if (Math.abs(headA.x - headB.x) <= (ContainerPanel.CELL_SIZE / 2) && 
-            Math.abs(headA.y - headB.y) <= (ContainerPanel.CELL_SIZE / 2)) 
-            return true;
 
-        // Check for body collision
-        for (int i = 1; i < snakeA.getSnakeBody().size(); i++) {
-            Node nodeA = snakeA.getSnakeBody().get(i);
-            for (int j = 0; j < snakeB.getSnakeBody().size(); j++) {
-                Node nodeB = snakeB.getSnakeBody().get(j);
-                if (nodeA.x == nodeB.x && nodeA.y == nodeB.y) {
-                    return true; // Collision detected at the bodies
-                }
-                if (Math.abs(nodeA.x - nodeB.x) <= (ContainerPanel.CELL_SIZE / 2) && 
-                    Math.abs(nodeA.y - nodeB.y) <= (ContainerPanel.CELL_SIZE / 2))
-                    return true;
+        // Head to head
+        if (Math.abs(headA.x - headB.x) <= (ContainerPanel.CELL_SIZE / 2) && 
+            Math.abs(headA.y - headB.y) <= (ContainerPanel.CELL_SIZE / 2)) {
+                System.out.println("Head to Head"); 
+                return true;
             }
+
+        // Head B to body A
+        for (int i = 1; i < snakeA.getSnakeBody().size(); ++i) {
+            Node nodeA = snakeA.getSnakeBody().get(i);
+            if (Math.abs(headB.x - nodeA.x) <= (ContainerPanel.CELL_SIZE / 2) && 
+                Math.abs(headB.y - nodeA.y) <= (ContainerPanel.CELL_SIZE / 2)) {
+                    System.out.println("Head B");
+                    return true;
+                }
         }
+        // Head A to body B
+        for (int i = 1; i < snakeB.getSnakeBody().size(); ++i) {
+            Node nodeB = snakeB.getSnakeBody().get(i);
+            if (Math.abs(headA.x - nodeB.x) <= (ContainerPanel.CELL_SIZE / 2) && 
+                Math.abs(headA.y - nodeB.y) <= (ContainerPanel.CELL_SIZE / 2)) {
+                    System.out.println("Head A");
+                    return true;
+                }
+        }
+        // for (int i = 1; i < snakeA.getSnakeBody().size(); i++) {
+        //     Node nodeA = snakeA.getSnakeBody().get(i);
+        //     for (int j = 0; j < snakeB.getSnakeBody().size(); j++) {
+        //         Node nodeB = snakeB.getSnakeBody().get(j);
+        //         if (nodeA.x == nodeB.x && nodeA.y == nodeB.y) {
+        //             return true; // Collision detected at the bodies
+        //         }
+        //         if (Math.abs(nodeA.x - nodeB.x) <= (ContainerPanel.CELL_SIZE / 2) && 
+        //             Math.abs(nodeA.y - nodeB.y) <= (ContainerPanel.CELL_SIZE / 2))
+        //             return true;
+        //     }
+        // }
 
         // No collision detected
         return false;
@@ -377,7 +323,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
         setTimer();
         fruit.setNewLocation(snakeA, bomb);
         if (enableBomb) {
-            bomb.setNewLocation(snakeA, fruit);
+            bomb.setNewLocation(snakeA, fruit, column, row, leftBorder, topBorder);
         }
     }
 
@@ -427,6 +373,8 @@ public class ContainerPanel extends JPanel implements KeyListener{
         snakeA.changeDirection(e, allowKeyPress, true);
         if (enableB) {
             snakeB.changeDirection(e, allowKeyPress, false);
+            shootBulletA = snakeA.checkShoot(e, allowKeyPress, false);
+            shootBulletB =  snakeB.checkShoot(e, allowKeyPress, true);
         }
     }
     @Override

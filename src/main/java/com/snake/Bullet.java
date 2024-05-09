@@ -4,51 +4,46 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.awt.event.KeyEvent;
 
 public class Bullet {
-    private int bulletX = 0;
-    private int bulletY = 0;
+    private int x = 0;
+    private int y = 0;
     private int speed = 10;
     private Timer bt;
+    private String direction = "Right";
 
-    public Bullet(int CELL_SIZE, String direction) {
+    public Bullet(int CELL_SIZE, String direction, Node head) {
+        setPosition(head.x, head.y);
+        this.direction = direction;
+        update(CELL_SIZE);
+    }
+
+    public void drawBullet(Graphics g, int CELL_SIZE) {
+        g.setColor(Color.YELLOW);
+        g.fillOval(x, y, CELL_SIZE, CELL_SIZE); 
+    }
+
+    public void update(int CELL_SIZE) {
         if (direction.equals("Left")) {
-            bulletX -= CELL_SIZE; // left, x -= CELL_SIZE
+            x -= CELL_SIZE * 2; // left, x -= CELL_SIZE
         }
         else if (direction.equals("Right")) {
-            bulletX += CELL_SIZE; // right, x += CELL_SIZE
+            x += CELL_SIZE * 2; // right, x += CELL_SIZE
         }
         else if (direction.equals("Up")) {
-            bulletY -= CELL_SIZE; // up, y -= CELL_SIZE
+            y -= CELL_SIZE * 2; // up, y -= CELL_SIZE
         }
         else if (direction.equals("Down")) {
-            bulletY += CELL_SIZE; // down, y += CELL_SIZE
+            y += CELL_SIZE * 2; // down, y += CELL_SIZE
         }
     }
-    public void drawBullet(Graphics g, Node head, int CELL_SIZE) {
-        setPosition(head.x, head.y);
 
-        g.setColor(Color.YELLOW);
-        g.fillOval(head.x, head.y, CELL_SIZE, CELL_SIZE); 
-    }
-    public void update(int CELL_SIZE, String direction) {
-        // if (direction.equals("Left")) {
-        //     bulletX -= CELL_SIZE; // left, x -= CELL_SIZE
-        // }
-        // else if (direction.equals("Right")) {
-        //     bulletX += CELL_SIZE; // right, x += CELL_SIZE
-        // }
-        // else if (direction.equals("Up")) {
-        //     bulletY -= CELL_SIZE; // up, y -= CELL_SIZE
-        // }
-        // else if (direction.equals("Down")) {
-        //     bulletY += CELL_SIZE; // down, y += CELL_SIZE
-        // }
-    }
     private void setPosition(int x, int y) {
-        this.bulletX = x;
-        this.bulletY = y;
+        this.x = x;
+        this.y = y;
     }
+
     public void setBulletTimer() {
         bt = new Timer();
         bt.scheduleAtFixedRate(new TimerTask() {
@@ -58,5 +53,16 @@ public class Bullet {
             }
         }, 0, speed);
     }
-    
+
+    public boolean checkBorder(int leftBorder, int rightBorder, int topBorder, int bottomBorder) {
+        if (x > rightBorder)
+            return true;
+        if (x < leftBorder)
+            return true;
+        if (y < topBorder)
+            return true;
+        if (y > bottomBorder) 
+            return true;
+        return false;
+    }
 }
