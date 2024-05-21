@@ -1,3 +1,5 @@
+com\snake\Sounds.class
+com\snake\Sounds$1.class
 com\snake\Main$1.class
 com\snake\ImageLoader.class
 com\snake\Main.class
@@ -6,11 +8,15 @@ com\snake\ScoreFile.class
 com\snake\ContainerPanel.class
 com\snake\Snake.class
 com\snake\ContainerPanel$1.class
+com\snake\Draw$1.class
 com\snake\Bomb.class
 com\snake\ContainerPanel$2.class
 com\snake\Stone.class
 com\snake\Bullet$1.class
 com\snake\ContainerPanel$4.class
+com\snake\OpeningScreen.class
+com\snake\Sounds$1$1.class
 com\snake\Fruit.class
 com\snake\Bullet.class
+com\snake\Draw.class
 com\snake\Node.class

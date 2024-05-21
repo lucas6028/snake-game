@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Bomb extends Fruit {
     private int x, y;
     private int CELL_SIZE = ContainerPanel.CELL_SIZE;
+    private Sounds sounds = new Sounds();
     
     public Bomb(int column, int row, int CELL_SIZE, int leftBorder, int topBorder) {
         img = ImageLoader.loadImageIconFromResource(ImageLoader.bombImage);    
@@ -22,6 +23,11 @@ public class Bomb extends Fruit {
             Node snakeNode = snake_body.get(i);
             if (Math.abs(snakeNode.x - (this.x + CELL_SIZE)) <= CELL_SIZE && 
                 Math.abs(snakeNode.y - (this.y + CELL_SIZE)) <= CELL_SIZE) {
+                     try {
+                        sounds.Boom();
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
                     return true;
                 }
         }
@@ -57,13 +63,14 @@ public class Bomb extends Fruit {
     public boolean check_overlap(int x, int y, Snake s, Fruit fruit) {
         ArrayList<Node> snake_body = s.getSnakeBody();
 
-        for (int j = 0; j < s.getSnakeBody().size(); ++j) {
-            if (x == snake_body.get(j).x &&
-                y == snake_body.get(j).y) {
-                    return true;
+        for (int i = 0; i < s.getSnakeBody().size(); ++i) {
+            for (int px = 0; px < ContainerPanel.CELL_SIZE * 2; ++px) {
+                for (int py = 0; py < ContainerPanel.CELL_SIZE * 2; ++py) {
+                    if (x + px == snake_body.get(i).x && y == snake_body.get(i).y )
+                        return true;
+                    else if (x + px == fruit.getX() && y + py == fruit.getY())
+                        return true;
                 }
-            else if (x == fruit.getX() && y == fruit.getY()) {
-                return true;
             }
         }
         return false;

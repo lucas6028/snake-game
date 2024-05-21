@@ -65,4 +65,26 @@ public class Bullet {
             return true;
         return false;
     }
+
+    public boolean touchSnakeHead(Snake snake) {
+        Node head = snake.getSnakeBody().get(0);
+
+        if (Math.abs(head.x - this.x) <= (ContainerPanel.CELL_SIZE / 2) && 
+            Math.abs(head.y - this.y) <= (ContainerPanel.CELL_SIZE / 2)) {
+                return true;
+            }
+        return false;
+    }
+
+    public boolean touchSnakeBody(Snake snake) {
+        for (int i = 1; i < snake.getSnakeBody().size(); ++i) {
+            Node node = snake.getSnakeBody().get(i);
+
+            if (Math.abs(node.x - this.x) <= (ContainerPanel.CELL_SIZE / 2) && 
+                Math.abs(node.y - this.y) <= (ContainerPanel.CELL_SIZE / 2)) {
+                    return true;
+                }
+        }
+        return false;
+    }
 }

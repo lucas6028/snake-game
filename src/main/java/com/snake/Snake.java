@@ -11,6 +11,7 @@ public class Snake {
     private int CELL_SIZE = ContainerPanel.CELL_SIZE;
     public String direction = "Right";
     public Node newHead; 
+    public Sounds sounds = new Sounds();
     private ArrayList<Node> snakeBody;
     private boolean eatFruit = false;
 
@@ -189,8 +190,14 @@ public class Snake {
             System.out.println("Eat the fruit");
             fruit.setNewLocation(this, bomb); // set fruit to new location
             fruit.drawFruit(g);
+            
             ScoreFile.score += 10;
             eatFruit = true;
+            try {
+                sounds.GetPoints();
+            } catch (Exception e) {
+                e.getMessage();
+            }
             return true;
         } else {
             eatFruit = false;

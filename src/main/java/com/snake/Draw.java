@@ -9,20 +9,35 @@ public class Draw {
     private int CELL_SIZE = ContainerPanel.CELL_SIZE;
     private int level = 0;
     private Timer coutdownTimer;
-    private int countdown = 180;
+    public int countdown = 180;
 
     public Draw(int level) {
         this.level = level;
     }
 
-    public void drawStatusBar(Graphics2D g2) {
+    public void drawStatusBar(Graphics2D g2, boolean enableB, int bloodA, int bloodB) {
         g2.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
-        if (ContainerPanel.enableB) {
-            g2.setColor(Color.RED);
-            g2.fillRect(250, 30, CELL_SIZE, CELL_SIZE);
+        if (enableB) {
             g2.setColor(Color.YELLOW);
             g2.drawString("Player 1", 300, 100);
-            g2.drawLine(250, 30, CELL_SIZE * 10 + 250, 30);
+            g2.drawLine(248, 28, 402, 28);
+            g2.drawLine(248, 47, 402, 47);
+            g2.drawLine(248, 28, 248, 47);
+            g2.drawLine(402, 28, 402, 47);
+            g2.drawString("Player 2", 650, 100);
+            g2.drawLine(767, 28, 613, 28);
+            g2.drawLine(767, 47, 613, 47);
+            g2.drawLine(767, 28, 767, 47);
+            g2.drawLine(613, 28, 613, 47);
+
+            // blood
+            g2.setColor(Color.RED);
+            for (int i = 0; i < bloodA; i += 10) {
+                g2.fillRect(250 + 15 * (i / 10), 30, 15, 15);
+            }
+            for (int i = 0; i < bloodB; i += 10) {
+                g2.fillRect(750 - 15 * (i / 10), 30, 15, 15);
+            }
             return;
         }
         g2.setColor(Color.WHITE);
@@ -61,14 +76,14 @@ public class Draw {
         g2.drawString("" + level, levelX, 50);
     }
 
-    public void changeLevel(Graphics g, boolean enableBomb, boolean enableChangeSpeed, boolean enableCrossBorder, Bomb bomb, Snake snakeA, Fruit fruit) {
+    public void changeLevel(Graphics g, Bomb bomb, Snake snakeA, Fruit fruit) {
         int score = ScoreFile.score;
         if (score < 99) {
             level = 1;
         }
         if (score > 99) {
             level = 2;
-            if (!enableBomb) {
+            if (!ContainerPanel.enableBomb) {
                 bomb.setNewLocation(snakeA, fruit, ContainerPanel.row, ContainerPanel.column, ContainerPanel.leftBorder, ContainerPanel.topBorder);
                 bomb.drawFruit(g);
             }
@@ -76,11 +91,11 @@ public class Draw {
         }
         if (score > 199) {
             level = 3;
-            enableChangeSpeed = true;
+            ContainerPanel.enableChangeSpeed = true;
         }
         if (score > 299) {
             level = 4;
-            enableCrossBorder = false;
+            ContainerPanel.enableCrossBorder = false;
         }
         if (score > 399) {
             level = 5;

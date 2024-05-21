@@ -6,12 +6,13 @@ import javax.swing.JFrame;
 // Graphic UI
 public class Main {
     private static ContainerPanel containerPanel;
-
+    public static Sounds sounds = new Sounds();
     public Main() {
 
     }
 
     public static void main(String[] args) {
+        
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 new Main();
@@ -28,5 +29,10 @@ public class Main {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         window.setResizable(false);
+        try{
+            sounds.BeforeGame();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
