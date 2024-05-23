@@ -3,7 +3,6 @@ package com.snake;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 import java.net.URL;
 
 public class ScoreFile {

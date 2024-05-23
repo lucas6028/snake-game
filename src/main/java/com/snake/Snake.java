@@ -169,11 +169,11 @@ public class Snake {
             return false;
         }
         if (byArrowKey) {
-            if (e.getKeyCode() == 88)
+            if (e.getKeyCode() == 110)
                 return true;
         }
         else {
-            if (e.getKeyCode() == 10)
+            if (e.getKeyCode() == 32)
                 return true;
         }
         return false;

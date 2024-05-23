@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.awt.event.KeyEvent;
 
 public class Bullet {
     private int x = 0;
@@ -19,8 +18,11 @@ public class Bullet {
         update(CELL_SIZE);
     }
 
-    public void drawBullet(Graphics g, int CELL_SIZE) {
-        g.setColor(Color.YELLOW);
+    public void drawBullet(Graphics g, int CELL_SIZE, boolean isSnakeA) {
+        if (isSnakeA)
+            g.setColor(Color.BLUE);
+        else
+            g.setColor(Color.YELLOW);
         g.fillOval(x, y, CELL_SIZE, CELL_SIZE); 
     }
 

@@ -3,7 +3,7 @@ package com.snake;
 import javax.swing.ImageIcon;
 
 public class ImageLoader {
-    public static final String background = "/images/background/navy_blue.jpg";
+    public static final String background = "/images/background/snow.jpg";
     public static final String singleButtonImage = "/images/buttons/onePlayer.png";
     public static final String twoButtonImage = "/images/buttons/twoPlayer.png";
     public static final String appleImage = "/images/fruits/apple.png";

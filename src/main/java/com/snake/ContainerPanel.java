@@ -2,10 +2,7 @@ package com.snake;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Rectangle2D;
 import java.util.*;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -67,8 +64,8 @@ public class ContainerPanel extends JPanel implements KeyListener{
         this.setLayout(cardLayout);
     
         // openingScreen.setLayout(new BoxLayout(openingScreen, BoxLayout.Y_AXIS));    
-        OpeningScreen openingScreen = new OpeningScreen();
-        openingScreen.buttonSingle.addActionListener(new ActionListener() {
+        OpeningScreen menu = new OpeningScreen();
+        menu.buttonSingle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     sounds.Click();
@@ -79,8 +76,13 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 switchScreen("Game");
             }
         });
-        openingScreen.buttonTwo.addActionListener(new ActionListener() {
+        menu.buttonTwo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                try {
+                    sounds.Click();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
                 enableB = true;
                 switchScreen("Game");
             }
@@ -178,7 +180,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
                             bulletA.remove(i);
                         }
                         else {
-                            bulletA.get(i).drawBullet(g2, CELL_SIZE);
+                            bulletA.get(i).drawBullet(g2, CELL_SIZE, true);
                         }
                     }
                     for (int i = 0; i < bulletB.size(); ++i) {
@@ -195,11 +197,9 @@ public class ContainerPanel extends JPanel implements KeyListener{
                             bulletB.remove(i);
                         }
                         else {
-                            bulletB.get(i).drawBullet(g2, CELL_SIZE);
+                            bulletB.get(i).drawBullet(g2, CELL_SIZE, false);
                         }
                     }
-
-                    
                     snakeB.moveSnake(CELL_SIZE);
                 }
                 fruit.drawFruit(g);
@@ -220,7 +220,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
         gameScreen.add(scoreLabel);
     
         // Add screens to the container panel
-        this.add(openingScreen, "Opening Screen");
+        this.add(menu, "Opening Screen");
         this.add(gameScreen, "Game");
     
         // Detect the keyboard

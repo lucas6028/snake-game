@@ -6,7 +6,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Draw {
-    private int CELL_SIZE = ContainerPanel.CELL_SIZE;
     private int level = 0;
     private Timer coutdownTimer;
     public int countdown = 180;
@@ -18,25 +17,32 @@ public class Draw {
     public void drawStatusBar(Graphics2D g2, boolean enableB, int bloodA, int bloodB) {
         g2.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         if (enableB) {
+            g2.setColor(Color.BLUE);
+            g2.fillOval(640, 85, 15, 15);
+            g2.drawString("Player 1", 670, 100);
             g2.setColor(Color.YELLOW);
-            g2.drawString("Player 1", 300, 100);
-            g2.drawLine(248, 28, 402, 28);
-            g2.drawLine(248, 47, 402, 47);
-            g2.drawLine(248, 28, 248, 47);
-            g2.drawLine(402, 28, 402, 47);
-            g2.drawString("Player 2", 650, 100);
             g2.drawLine(767, 28, 613, 28);
             g2.drawLine(767, 47, 613, 47);
             g2.drawLine(767, 28, 767, 47);
             g2.drawLine(613, 28, 613, 47);
+            g2.fillOval(270, 85, 15, 15);
+            g2.drawString("Player 2", 300, 100);
+            g2.drawLine(248, 28, 402, 28);
+            g2.drawLine(248, 47, 402, 47);
+            g2.drawLine(248, 28, 248, 47);
+            g2.drawLine(402, 28, 402, 47);
+
+            // g2.setColor(Color.BLUE);
+            // g2.fillOval(900, 100, 15, 15);
+            // g2.setColor(Color.YELLOW);
 
             // blood
             g2.setColor(Color.RED);
             for (int i = 0; i < bloodA; i += 10) {
-                g2.fillRect(250 + 15 * (i / 10), 30, 15, 15);
+                g2.fillRect(750 - 15 * (i / 10), 30, 15, 15);
             }
             for (int i = 0; i < bloodB; i += 10) {
-                g2.fillRect(750 - 15 * (i / 10), 30, 15, 15);
+                g2.fillRect(250 + 15 * (i / 10), 30, 15, 15);
             }
             return;
         }
