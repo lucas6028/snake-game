@@ -103,6 +103,7 @@ public class Snake {
 
     public void moveSnake(int CELL_SIZE) {
         // Move the snake by Keyboard
+
         snakeX = this.getSnakeBody().get(0).x;
         snakeY = this.getSnakeBody().get(0).y;
 

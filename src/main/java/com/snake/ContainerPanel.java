@@ -145,7 +145,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 // Snake B
                 if (enableB) {
                     // snakeB = new Snake(100);
-                    drawGameOver(g2, gameover, Awin, Bwin);
+                    snakeB.drawSnake(g, false);
                     if (snakeB.checkEatFruit(fruit, bomb, g)) {
                         bloodB += 10;
                         if (bloodB > 100)
