@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class ContainerPanel extends JPanel implements KeyListener{
@@ -38,7 +37,9 @@ public class ContainerPanel extends JPanel implements KeyListener{
     public static boolean enableChangeSpeed = false;
     public boolean shootBulletA = false;
     public boolean shootBulletB = false;
-    public static boolean winA = false;
+    public static boolean gameover = false;
+    public boolean Awin = false;
+    public boolean Bwin = false;
     
     private Node headA;
     private Node headB;
@@ -52,10 +53,7 @@ public class ContainerPanel extends JPanel implements KeyListener{
     public static ArrayList<Bullet> bulletB = new ArrayList<>();
 
     public ContainerPanel () {
-        // Load the background image
-        // ImageIcon backgroundImage = ImageLoader.loadImageIconFromResource(ImageLoader.background);
         draw = new Draw(level);
-    
         // Set JPanel properties
         // setPreferredSize(new Dimension(backgroundImage.getIconWidth(), backgroundImage.getIconHeight()));
     
@@ -96,7 +94,6 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 // g.drawImage(backgroundImage.getImage(), 0, 0, null);
                 super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g;
-    
                 draw.drawBorder(g2);
 
                 if (!enableBomb) {
@@ -107,61 +104,97 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 // Snake A
                 snakeA.drawSnake(g, true);
                 headA = snakeA.getSnakeBody().get(0);
+                drawGameOver(g2, gameover, Awin, Bwin);
                 if (snakeA.checkEatFruit(fruit, bomb, g)) {
+                    bloodA += 10;
+                    if (bloodA > 100)
+                        bloodA = 100;
                     if (enableChangeSpeed)
                         changeSpeed();
                 }  
                 if (bomb.touchBomb(snakeA)) {
-                    if (enableB)
+                    if (enableB) {
                         bloodA -= 10;
+                        try {
+                            sounds.Hurt();
+                        } catch (Exception e) {
+                            e.getMessage();
+                        }
+                    }
                     else
-                        resetUI();
+                        gameover = true;
                 }
                 if (snakeA.checkEatItSelf(headA)) {
-                    if (enableB)
+                    if (enableB) {
                         bloodA -= 20;
-                    else
-                        resetUI();
+                        try {
+                            sounds.Hurt();
+                        } catch (Exception e) {
+                            e.getMessage();
+                        }
+                    }
+                    else{
+                        gameover = true;
+                    }
                 }
                 if (snakeA.isCrossBorder() == true && !enableCrossBorder) {
-                    resetUI();
+                    gameover = true;
                 }
                 snakeA.moveSnake(CELL_SIZE);
                 
                 // Snake B
                 if (enableB) {
                     // snakeB = new Snake(100);
-                    snakeB.drawSnake(g, false);
+                    drawGameOver(g2, gameover, Awin, Bwin);
                     if (snakeB.checkEatFruit(fruit, bomb, g)) {
-                        if (enableChangeSpeed) changeSpeed();
+                        bloodB += 10;
+                        if (bloodB > 100)
+                            bloodB = 100;
+                        // if (enableChangeSpeed) changeSpeed();
                     }  
-                    
                     headB = snakeB.getSnakeBody().get(0);
                     if (bomb.touchBomb(snakeB)) {
                         bloodB -= 10;
-                        // resetUI();
+                        try {
+                            sounds.Hurt();
+                        } catch (Exception e) {
+                            e.getMessage();
+                        }
                     }
                     if (snakeB.checkEatItSelf(headB)) {
                         bloodB -= 20;
-                        // resetUI();
+                        try {
+                            sounds.Hurt();
+                        } catch (Exception e) {
+                            e.getMessage();
+                        }
                     }
                     if (snakeB.isCrossBorder() == true && !enableCrossBorder) {
-                        resetUI();
+                        gameover = true;
                     }
                     
                     boolean collision = checkCollision(snakeA, snakeB);
                     if (collision) {
                         System.out.println("Collision detected!");
-                        // resetUI();
                     }
 
                     // add the bullet                        
                     if (shootBulletA) {
                         bulletA.add(new Bullet(CELL_SIZE, snakeA.direction, headA));
+                        try {
+                            sounds.Gun();
+                        } catch (Exception e) {
+                            e.getMessage();
+                        }
                         shootBulletA = false;
                     }
                     if (shootBulletB) {
                         bulletB.add(new Bullet(CELL_SIZE, snakeB.direction, headB));
+                        try {
+                            sounds.Gun();
+                        } catch (Exception e) {
+                            e.getMessage();
+                        }
                         shootBulletB = false;
                     }
                     
@@ -171,9 +204,11 @@ public class ContainerPanel extends JPanel implements KeyListener{
                         // shot on another snake
                         if (bulletA.get(i).touchSnakeHead(snakeB)) {
                             System.out.println("Shoot at head B");
+                            bloodB -= 20;
                         }
                         else if (bulletA.get(i).touchSnakeBody(snakeB)) {
                             System.out.println("Shoot at body B");
+                            bloodB -= 10;
                         }
                         // check border
                         if (bulletA.get(i).checkBorder(leftBorder, rightBorder, topBorder, bottomBorder)) {
@@ -188,9 +223,11 @@ public class ContainerPanel extends JPanel implements KeyListener{
                         // shot on another snake
                         if (bulletB.get(i).touchSnakeHead(snakeA)) {
                             System.out.println("Shoot at head A");
+                            bloodA -= 20;
                         }
                         else if (bulletB.get(i).touchSnakeBody(snakeA)) {
                             System.out.println("Shoot at body A");
+                            bloodA -= 10;
                         }
                         // check border
                         if (bulletB.get(i).checkBorder(leftBorder, rightBorder, topBorder, bottomBorder)) {
@@ -211,8 +248,18 @@ public class ContainerPanel extends JPanel implements KeyListener{
 
                 // no blood
                 if (enableB) {
-                    if (bloodA <= 0) resetUI();
-                    if (bloodB <= 0) resetUI();
+                    if (bloodA <= 0){
+                        gameover = true;
+                        Bwin = true;
+                        Awin = false;
+
+                    }
+                    if (bloodB <= 0){
+                        gameover = true;
+                        Awin = true;
+                        Bwin = false;
+
+                    }
                 }
             }
         };
@@ -265,6 +312,11 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 System.out.println("Head to Head"); 
                 bloodA -= 30;
                 bloodB -= 30;
+                try {
+                    sounds.Hurt();
+                } catch (Exception e) {
+                    e.getMessage();
+                }
                 return true;
             }
 
@@ -275,6 +327,11 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 Math.abs(headB.y - nodeA.y) <= (ContainerPanel.CELL_SIZE / 2)) {
                     System.out.println("Head B");
                     bloodB -= 10;
+                    try {
+                        sounds.Hurt();
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
                     // winA = true;
                     return true;
                 }
@@ -286,6 +343,11 @@ public class ContainerPanel extends JPanel implements KeyListener{
                 Math.abs(headA.y - nodeB.y) <= (ContainerPanel.CELL_SIZE / 2)) {
                     System.out.println("Head A");
                     bloodA -= 10;
+                    try {
+                        sounds.Hurt();
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
                     // winA = false;
                     return true;
                 }
@@ -303,6 +365,9 @@ public class ContainerPanel extends JPanel implements KeyListener{
         draw.countdown = 180;
         bloodA = 100;
         bloodB = 100;
+        Awin = false;
+        Bwin = false;
+        gameover = false;
         
         if (snakeA != null) {
             snakeA.getSnakeBody().clear();
@@ -332,55 +397,73 @@ public class ContainerPanel extends JPanel implements KeyListener{
 
         t.cancel();
         t.purge();
-
-        int responese = JOptionPane.showOptionDialog(
-            this,//1.parent container component
-            "Game Over!! Your score is "
-            + (ScoreFile.score)
-            + ". The highest score was "
-            + ScoreFile.highest_score
-            + ". Would you like to start over?",//2.Set message to display
-            
-            "Game over",//3.Set message title to display
-            JOptionPane.YES_NO_OPTION,//4.Set display option type
-            JOptionPane.INFORMATION_MESSAGE,//5.Set message type to display
-            null,//6.Customize patterns
-            null,//7.Set button text
-            JOptionPane.YES_OPTION);  //8.Set default button
-            // When snake eat itself
             
         //write score
         file.write_a_file(ScoreFile.score);
+    }
 
-        //option execution
-        try {
-            sounds.Click();
-        } catch (Exception e) {
-            e.getMessage();
-        }
-        switch (responese){
-            case JOptionPane.CLOSED_OPTION:
-                System.exit(0);
-                break;
-            case JOptionPane.NO_OPTION:
-                System.exit(0);
-                break;
-            case JOptionPane.YES_OPTION:
-                reset();
-                return;
+    void drawGameOver(Graphics g, boolean gameover, boolean Awin, boolean Bwin) {
+        if (gameover) {
+            if(Awin){
+                g.setColor(Color.BLUE);
+                g.setFont(new Font("Times New Roman", Font.BOLD,50));
+                g.drawString("Player 1 Win!", 400 , 330);
+                g.setColor(Color.WHITE);
+                g.setFont(new Font("Arial", Font.PLAIN,20));
+                g.drawString("Press Enter to try again!", 440 , 380);
+                try {
+                    sounds.GameOver();
+                } catch (Exception e) {
+                    e.getMessage();
+                }
+                t.cancel();
+                t.purge();
+            }
+            else if(Bwin){
+                g.setColor(Color.YELLOW);
+                g.setFont(new Font("Times New Roman", Font.BOLD,50));
+                g.drawString("Player 2 Win!", 400 , 330);
+                g.setColor(Color.WHITE);
+                g.setFont(new Font("Arial", Font.PLAIN,20));
+                g.drawString("Press Enter to try again!", 440 , 380);
+                try {
+                    sounds.GameOver();
+                } catch (Exception e) {
+                    e.getMessage();
+                }
+                t.cancel();
+                t.purge();
+            }
+            else{
+                g.setColor(Color.WHITE);
+                g.setFont(new Font("Times New Roman", Font.BOLD,50));
+                g.drawString("Game over!", 400 , 330);
+                g.setFont(new Font("Arial", Font.PLAIN,20));
+                g.drawString("Press Enter to try again!", 420 , 380);
+                try {
+                    sounds.GameOver();
+                } catch (Exception e) {
+                    e.getMessage();
+                }
+                t.cancel();
+                t.purge();
+            }
         }
     }
 
     // Move the snake by Keyboard 
     @Override
     public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+            reset();
+        }
         allowKeyPress = true;
         // System.out.println("keyPressed");
         snakeA.changeDirection(e, allowKeyPress, true);
         if (enableB) {
             snakeB.changeDirection(e, allowKeyPress, false);
-            shootBulletA = snakeA.checkShoot(e, allowKeyPress, false);
-            shootBulletB =  snakeB.checkShoot(e, allowKeyPress, true);
+            shootBulletA = snakeA.checkShoot(e, allowKeyPress, true);
+            shootBulletB =  snakeB.checkShoot(e, allowKeyPress, false);
         }
     }
     @Override

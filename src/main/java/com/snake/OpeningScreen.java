@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 public class OpeningScreen extends JPanel {
-
     ImageIcon singleImage = ImageLoader.loadImageIconFromResource(ImageLoader.singleButtonImage);
     ImageIcon twoImage = ImageLoader.loadImageIconFromResource(ImageLoader.twoButtonImage);
     // JButton buttonSingle = new TransparentButton();
@@ -24,6 +23,7 @@ public class OpeningScreen extends JPanel {
         this.setLayout(null);
 
         buttonSingle.setIcon(singleImage);
+        // buttonSingle.setIcon(twoImage);
         buttonSingle.setBorder(null);
         buttonSingle.setPreferredSize(new Dimension(150, 150));
         buttonTwo.setIcon(twoImage);
