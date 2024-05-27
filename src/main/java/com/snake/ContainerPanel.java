@@ -357,6 +357,8 @@ public class ContainerPanel extends JPanel implements KeyListener{
     }
         
     private void reset() {
+        //write score
+        file.write_a_file(ScoreFile.score);
         ScoreFile.score = 0;
         enableCrossBorder = true;
         enableBomb = false;
@@ -398,8 +400,6 @@ public class ContainerPanel extends JPanel implements KeyListener{
         t.cancel();
         t.purge();
             
-        //write score
-        file.write_a_file(ScoreFile.score);
     }
 
     void drawGameOver(Graphics g, boolean gameover, boolean Awin, boolean Bwin) {
