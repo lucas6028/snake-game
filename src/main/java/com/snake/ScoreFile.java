@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.net.URL;
 
 public class ScoreFile {
-    public static int score = 0;
+    public static int score = 90;
     public static int highest_score;
     public static ArrayList<Integer> numbers = new ArrayList<>(5);
     private static final String recordsFileName = "filename.txt";

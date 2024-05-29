@@ -28,6 +28,7 @@ public class Bomb extends Fruit {
                     } catch (Exception e) {
                         e.getMessage();
                     }
+                    System.out.println("Touch Bomb");
                     return true;
                 }
         }
@@ -45,7 +46,7 @@ public class Bomb extends Fruit {
         }
     }
     
-    public void setNewLocation(Snake s, Fruit fruit, int column, int row, int leftBorder, int topBorder) {
+    public void setNewLocation(Snake s, Fruit fruit, int row, int column, int leftBorder, int topBorder) {
         int new_x = (int) (Math.floor(Math.random() * (column - 1)) * CELL_SIZE + leftBorder);
         int new_y = (int) (Math.floor(Math.random() * (row - 1)) * CELL_SIZE + topBorder);
         boolean overlapping = check_overlap(new_x, new_y, s, fruit);
@@ -58,6 +59,8 @@ public class Bomb extends Fruit {
 
         this.x = new_x;
         this.y = new_y; 
+        System.out.println("Bomb x: " + this.x);
+        System.out.println("Bomb y: " + this.y);
     }
 
     public boolean check_overlap(int x, int y, Snake s, Fruit fruit) {
