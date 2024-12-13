@@ -20,7 +20,7 @@ This is a classic Snake game implemented in Java using Swing for the graphical u
 
    ```sh
    git clone https://github.com/lucas6028/snake-game.git
-   cd Snake-game/demo
+   cd snake-game/demo
    ```
 
 2. Build the project using Maven:
