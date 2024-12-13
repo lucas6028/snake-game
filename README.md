@@ -1,6 +1,6 @@
 # Snake Game
 
-![image](https://hackmd.io/_uploads/HJCQePY4yx.png)
+![alt text](https://hackmd.io/_uploads/HJCQePY4yx.png)
 
 This is a classic Snake game implemented in Java using Swing for the graphical user interface. The game supports both single-player and two-player modes.
 
@@ -123,11 +123,11 @@ target/
 
 ## Screenshots
 
-![image](https://hackmd.io/_uploads/BkriCLtVJx.png)
-![image](https://hackmd.io/_uploads/H1eaAUFEJx.png)
-![image](https://hackmd.io/_uploads/ryOokDFV1e.png)
-![image](https://hackmd.io/_uploads/S1Q0ywF4kx.png)
-![image](https://hackmd.io/_uploads/Sy-aJDFVkl.png)
+![alt text](https://hackmd.io/_uploads/BkriCLtVJx.png)
+![alt text](https://hackmd.io/_uploads/H1eaAUFEJx.png)
+![alt text](https://hackmd.io/_uploads/ryOokDFV1e.png)
+![alt text](https://hackmd.io/_uploads/S1Q0ywF4kx.png)
+![alt text](https://hackmd.io/_uploads/Sy-aJDFVkl.png)
 
 ## Contributing
 
