@@ -1,6 +1,6 @@
 # Snake Game
 
-![alt text](https://hackmd.io/_uploads/HJCQePY4yx.png)
+![alt text](https://github.com/lucas6028/snake-game/blob/main/src/main/resources/images/readme/2p.png)
 
 This is a classic Snake game implemented in Java using Swing for the graphical user interface. The game supports both single-player and two-player modes.
 
@@ -123,11 +123,11 @@ target/
 
 ## Screenshots
 
-![alt text](https://hackmd.io/_uploads/BkriCLtVJx.png)
-![alt text](https://hackmd.io/_uploads/H1eaAUFEJx.png)
-![alt text](https://hackmd.io/_uploads/ryOokDFV1e.png)
-![alt text](https://hackmd.io/_uploads/S1Q0ywF4kx.png)
-![alt text](https://hackmd.io/_uploads/Sy-aJDFVkl.png)
+![alt text](https://github.com/lucas6028/snake-game/blob/main/src/main/resources/images/readme/p1p2.png)
+![alt text](https://github.com/lucas6028/snake-game/blob/main/src/main/resources/images/readme/1.png)
+![alt text](https://github.com/lucas6028/snake-game/blob/main/src/main/resources/images/readme/2.png)
+![alt text](https://github.com/lucas6028/snake-game/blob/main/src/main/resources/images/readme/3.png)
+![alt text](https://github.com/lucas6028/snake-game/blob/main/src/main/resources/images/readme/4.png)
 
 ## Contributing
 
